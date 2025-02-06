@@ -1,0 +1,52 @@
+\documentclass{article}
+\usepackage[a4paper, margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{titlesec}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{array}  
+\usepackage{rotating}
+\usepackage{pifont} 
+\usepackage{subcaption}
+\usepackage{setspace}
+\usepackage{hyperref}
+\usepackage{natbib}  % 引用 BibTeX 需要 natbib 包
+\usepackage{multirow} 
+\usepackage{titlesec}
+\usepackage{array} % 控制列宽
+\usepackage{adjustbox} 
+\usepackage{ragged2e} % 支持两端对齐
+\bibliographystyle{chicago}  % 使用 Chicago (Author-Date) 引用格式
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    \vspace*{2cm}
+    {\Huge \textbf{Proposal: GIS-Powered Natural Language Query System}} \\
+    \vspace{1.5cm}
+    \textbf{Course:} DSCI 551 - Foundations of Data Science \\
+    \textbf{Instructor:} Dr. Wensheng Wu \\
+    \textbf{Institution:} Viterbi School of Engineering, University of Southern California \\
+    \textbf{Date:} \today \\
+    \vfill
+    \textbf{Team Members:} \\
+    - [Yucheng Liu] - [Project Designing, Data Collection, Document Writing] \\
+    \vfill
+    \begin{justify}
+        \textbf{Project Abstract} - This proposal presents a \textbf{GIS-powered natural language query system} that integrates \textbf{PostGIS} and \textbf{LLMs} to allow users to retrieve geospatial data using natural language queries. The system translates user queries into \textbf{optimized SQL statements} that efficiently interact with a GIS database, enabling users to ask spatial questions such as **"Where are the nearest electric vehicle charging stations?"** or **"Find all Chinese restaurants within 5 km of my location."**. The project leverages \textbf{LLM-based query processing, spatial indexing, and GIS visualization tools} to enhance accessibility and usability of geospatial data.
+        \vfill
+        \textbf{Keywords:} GIS, LLM, PostGIS, Natural Language Queries, Spatial Database, Geospatial Search, Route Optimization, OpenStreetMap, API Development, Spatial Indexing, Machine Learning, Location-Based Services
+    \end{justify}
+
+\end{titlepage}
+
+\section{Introduction}
+
+
+% 参考文献部分
+\bibliography{references}  % 引用 BibTeX 文件 "references.bib"
+
+\end{document}
