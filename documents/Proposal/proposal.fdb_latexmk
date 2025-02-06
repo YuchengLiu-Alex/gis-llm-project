@@ -1,14 +1,14 @@
 # Fdb version 4
-["bibtex proposal"] 1738839401 "proposal.aux" "proposal.bbl" "proposal" 1738840394 0
+["bibtex proposal"] 1738841182 "proposal.aux" "proposal.bbl" "proposal" 1738841183 0
   "./references.bib" 1738839207 0 d41d8cd98f00b204e9800998ecf8427e ""
   "/usr/local/texlive/2023/texmf-dist/bibtex/bst/chicago/chicago.bst" 1198629289 37416 2ae04276c51f11eda70770f4081293b7 ""
-  "proposal.aux" 1738840394 740 401e43b6a115c1b555bef0a329e2bf27 "pdflatex"
+  "proposal.aux" 1738841183 1808 f567c7d93557a692b6318b5a7ee90698 "pdflatex"
   (generated)
   "proposal.bbl"
   "proposal.blg"
   (rewritten before read)
-["pdflatex"] 1738840393 "/Users/liuyucheng/Desktop/DSCI551/Project/documents/Proposal/proposal.tex" "proposal.pdf" "proposal" 1738840394 0
-  "/Users/liuyucheng/Desktop/DSCI551/Project/documents/Proposal/proposal.tex" 1738840393 2250 3332cce9d2c4a05bd448e24932226d9a ""
+["pdflatex"] 1738841182 "/Users/liuyucheng/Desktop/DSCI551/Project/documents/Proposal/proposal.tex" "proposal.pdf" "proposal" 1738841183 0
+  "/Users/liuyucheng/Desktop/DSCI551/Project/documents/Proposal/proposal.tex" 1738841181 2713 161b7107123c5a18de14f86ec293aa59 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/tfm/adobe/symbol/psyr.tfm" 1136768653 1408 5937f58aa508ea2cea4901c07d10f5fe ""
   "/usr/local/texlive/2023/texmf-dist/fonts/tfm/adobe/zapfding/pzdr.tfm" 1136768653 1528 f853c4d1b4e0550255e02831fdc8496f ""
@@ -97,10 +97,10 @@
   "/usr/local/texlive/2023/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1696229159 4623355 b8cad38412faebe1ce5b780a45db67bd ""
   "/usr/local/texlive/2023/texmf-var/web2c/pdftex/pdflatex.fmt" 1696229102 7883455 ec23c51f25feae536fabd98dc8c9b403 ""
   "/usr/local/texlive/2023/texmf.cnf" 1678822455 577 1b2b1af17af2508fb20dd85783af4050 ""
-  "proposal.aux" 1738840394 740 401e43b6a115c1b555bef0a329e2bf27 "pdflatex"
-  "proposal.bbl" 1738839401 49 0eba253fc001332e731e8aba3f23127b "bibtex proposal"
-  "proposal.out" 1738840394 103 9814c2d956916adb9290eca4e25c967a "pdflatex"
-  "proposal.tex" 1738840393 2250 3332cce9d2c4a05bd448e24932226d9a ""
+  "proposal.aux" 1738841183 1808 f567c7d93557a692b6318b5a7ee90698 "pdflatex"
+  "proposal.bbl" 1738841182 49 0eba253fc001332e731e8aba3f23127b "bibtex proposal"
+  "proposal.out" 1738841183 1319 6eb5b93ab773464fe18c2950e04dc8a7 "pdflatex"
+  "proposal.tex" 1738841181 2713 161b7107123c5a18de14f86ec293aa59 ""
   (generated)
   "proposal.aux"
   "proposal.log"
