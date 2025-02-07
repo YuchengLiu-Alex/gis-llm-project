@@ -25,8 +25,9 @@
 \begin{titlepage}
     \centering
     \vspace*{2cm}
-    {\Huge \textbf{Proposal: GIS-Powered Natural Language Query System}} \\
+    {\Huge \textbf{Proposal of ChatGIS: GIS-Powered Natural Language Query System}} \\
     \vspace{1.5cm}
+    \textbf{Group Name:} ChatDB 70 \\
     \textbf{Course:} DSCI 551 - Foundations of Data Science \\
     \textbf{Instructor:} Dr. Wensheng Wu \\
     \textbf{Institution:} Viterbi School of Engineering, University of Southern California \\
@@ -34,9 +35,19 @@
     \vfill
     \textbf{Team Members:} \\
     - [Yucheng Liu] - [Project Designing, Data Collection, Document Writing] \\
+    
+
+    \vfill
+    \textbf{Team Members Background:} \\
+    \begin{justify}
+
+        \textbf{Yucheng Liu} is a Master’s student in Spatial Data Science at USC with a strong background in computer science, geospatial data science, and deep learning. He specializes in knowledge distillation, cloud-based application development, and geospatial analytics. Proficient in Python, SQL, NoSQL, and GIS, he has experience with AWS, TensorFlow,  and ArcGIS Pro. His research focuses on knowledge distillation and multimodal learning in the physiological signals, with publications in ACM MM and IJCAI.
+        
+    \end{justify}
+
     \vfill
     \begin{justify}
-        \textbf{Project Abstract} - This proposal presents a \textbf{GIS-powered natural language query system} that integrates \textbf{PostGIS} and \textbf{LLMs} to allow users to retrieve geospatial data using natural language queries. The system translates user queries into \textbf{optimized SQL statements} that efficiently interact with a GIS database, enabling users to ask spatial questions such as **"Where are the nearest electric vehicle charging stations?"** or **"Find all Chinese restaurants within 5 km of my location."**. The project leverages \textbf{LLM-based query processing, spatial indexing, and GIS visualization tools} to enhance accessibility and usability of geospatial data.
+        \textbf{Project Abstract} - This proposal presents a \textbf{GIS-powered natural language query system} called ChatGIS that integrates \textbf{PostGIS} and \textbf{LLMs} to allow users to retrieve geospatial data using natural language queries. The system translates user queries into \textbf{optimized SQL statements} that efficiently interact with a GIS database, enabling users to ask spatial questions such as \textit{``Where are the nearest electric vehicle charging stations?''} or \textit{``Find all Chinese restaurants within 5 km of my location.''}. ChatGIS levels up the accessibility and usability of geospatial data by leveraging \textbf{LLM-based query processing, spatial indexing, and GIS visualization tools}.
         \vfill
         \textbf{Keywords:} GIS, LLM, PostGIS, Natural Language Queries, Spatial Database, Geospatial Search, Route Optimization, OpenStreetMap, API Development, Spatial Indexing, Machine Learning, Location-Based Services
     \end{justify}
@@ -45,7 +56,7 @@
 
 \section{Introduction}
 
-Geospatial databases provide powerful spatial analysis capabilities but often require SQL expertise to query effectively. This make the GIS system hard to use for the non-technical user. To address this issue, we propose a \textbf{GIS-powered natural language query system} that integrates \textbf{PostGIS} and \textbf{LLMs} to allow users to retrieve geospatial data using natural language queries. The system translates user queries into \textbf{optimized SQL statements} that efficiently interact with a GIS database, enabling users to ask spatial questions such as \textit{``Where are the nearest electric vehicle charging stations?''} or \textit{``Find all Chinese restaurants within 5 km of my location.''}. The project leverages \textbf{LLM-based query processing, spatial indexing, and GIS visualization tools} to enhance accessibility and usability of geospatial data.
+Geospatial databases provide powerful spatial analysis capabilities but often require SQL expertise to query effectively. This make the GIS system hard to use for the non-technical user. To address this issue, we propose ChatGIS, a \textbf{GIS-powered natural language query system} that integrates \textbf{PostGIS} and \textbf{LLMs} to allow users to retrieve geospatial data using natural language queries. The system translates user queries into \textbf{optimized SQL statements} that efficiently interact with a GIS database, enabling users to ask spatial questions such as \textit{``Where are the nearest electric vehicle charging stations?''} or \textit{``Find all Chinese restaurants within 5 km of my location.''}. ChatGIS levels up the accessibility and usability of geospatial data by leveraging \textbf{LLM-based query processing, spatial indexing, and GIS visualization tools}.
 
 This project aims to integrate \textbf{Large Language Models (LLMs)} with \textbf{PostGIS}, enabling users to perform spatial queries in California using natural language. By translating user queries into SQL, the system facilitates intuitive geospatial searches and, if time permits, visualizes the results on the web. Additionally, we provide a \textbf{Flask API} to support seamless integration into third-party applications. Furthermore, we plan to explore cloud deployment to offer \textbf{Location-Based Services} to users, contingent on available time.
 
@@ -72,11 +83,11 @@ In this project, we will try to implement the local LLM model first and the LLM 
 % LLM 如何解析用户查询并转换 SQL
 In this project we will use the Llama model \cite{touvron2023llama} as the LLM locally. Llama is a natural language processing model developed by the Stanford NLP group. Llama is a pre-trained transformer-based language model that can generate SQL queries. We will use the Llama model to parse the user queries and convert them into SQL statements. The schema of the GIS database will be used in the Rag to help optimize the SQL queries.
 
-ChatGPT \cite{radford2018improving} is a pre-trained transformer-based language model that can generate natural language responses. We will use the ChatGPT API as the Back up plan to generate responses to the user queries.
+ChatGPT \cite{achiam2023gpt} is a pre-trained transformer-based language model that can generate natural language responses. We will use the ChatGPT API as the Back up plan to generate responses to the user queries.
 
 \subsection{Database \& Storage}
 % PostGIS 数据结构、GIS 查询优化
-In this project, we will use the PostGIS database to store and manage the geospatial data. PostGIS is a spatial database extender for PostgreSQL that adds support for geographic objects. The PostGIS database will be used to store and manage the geospatial data. The schema of the database will be designed based on the OSM dataset.
+In this project, we will use the PostGIS database \cite{obe2021postgis} to store and manage the geospatial data. PostGIS is a spatial database extender for PostgreSQL that adds support for geographic objects. The PostGIS database will be used to store and manage the geospatial data. The schema of the database will be designed based on the OSM dataset.
 
 \subsection{API \& Integration}
 % Flask API 如何提供服务

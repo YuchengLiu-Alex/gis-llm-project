@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.10.1)  6 FEB 2025 18:30
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.10.1)  6 FEB 2025 20:38
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -483,33 +483,33 @@ Package hyperref Info: Link coloring OFF on input line 23.
  [1
 
 {/usr/local/texlive/2023/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-<figs/Overview.pdf, id=58, 868.24374pt x 472.76625pt>
+<figs/Overview.pdf, id=59, 868.24374pt x 472.76625pt>
 File: figs/Overview.pdf Graphic file (type pdf)
 <use figs/Overview.pdf>
-Package pdftex.def Info: figs/Overview.pdf  used on input line 64.
+Package pdftex.def Info: figs/Overview.pdf  used on input line 75.
 (pdftex.def)             Requested size: 391.28378pt x 213.06024pt.
 
 pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.74 
+l.85 
       [1 <./figs/Overview.pdf>] (./proposal.bbl [2]) [3] (./proposal.aux)
 Package rerunfilecheck Info: File `proposal.out' has not changed.
 (rerunfilecheck)             Checksum: 8EFF35643600E392CF44A2D74136B427;1506.
  ) 
 Here is how much of TeX's memory you used:
- 13117 strings out of 476025
- 215422 string characters out of 5790017
+ 13121 strings out of 476025
+ 215479 string characters out of 5790017
  1862388 words of memory out of 5000000
- 33360 multiletter control sequences out of 15000+600000
+ 33363 multiletter control sequences out of 15000+600000
  515447 words of font info for 42 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,6n,77p,981b,548s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,6n,77p,993b,548s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on proposal.pdf (4 pages, 117531 bytes).
+Output written on proposal.pdf (4 pages, 120621 bytes).
 PDF statistics:
- 128 PDF objects out of 1000 (max. 8388607)
- 104 compressed objects within 2 object streams
- 26 named destinations out of 1000 (max. 500000)
+ 131 PDF objects out of 1000 (max. 8388607)
+ 107 compressed objects within 2 object streams
+ 27 named destinations out of 1000 (max. 500000)
  94 words of extra memory for PDF output out of 10000 (max. 10000000)
 
