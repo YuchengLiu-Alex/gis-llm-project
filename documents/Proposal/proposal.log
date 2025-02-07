@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.10.1)  6 FEB 2025 03:26
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.10.1)  6 FEB 2025 18:30
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -427,15 +427,15 @@ LaTeX Font Info:    ... okay on input line 23.
 * layout: <same size as paper>
 * layoutoffset:(h,v)=(0.0pt,0.0pt)
 * modes: 
-* h-part:(L,W,R)=(72.26999pt, 452.9679pt, 72.26999pt)
-* v-part:(T,H,B)=(72.26999pt, 700.50687pt, 72.26999pt)
+* h-part:(L,W,R)=(54.2025pt, 489.10287pt, 54.2025pt)
+* v-part:(T,H,B)=(54.2025pt, 736.64185pt, 54.2025pt)
 * \paperwidth=597.50787pt
 * \paperheight=845.04684pt
-* \textwidth=452.9679pt
-* \textheight=700.50687pt
-* \oddsidemargin=0.0pt
-* \evensidemargin=0.0pt
-* \topmargin=-37.0pt
+* \textwidth=489.10287pt
+* \textheight=736.64185pt
+* \oddsidemargin=-18.06749pt
+* \evensidemargin=-18.06749pt
+* \topmargin=-55.06749pt
 * \headheight=12.0pt
 * \headsep=25.0pt
 * \topskip=10.0pt
@@ -482,32 +482,34 @@ Package hyperref Info: Link coloring OFF on input line 23.
 
  [1
 
-{/usr/local/texlive/2023/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] (./proposal.bbl
+{/usr/local/texlive/2023/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+<figs/Overview.pdf, id=58, 868.24374pt x 472.76625pt>
+File: figs/Overview.pdf Graphic file (type pdf)
+<use figs/Overview.pdf>
+Package pdftex.def Info: figs/Overview.pdf  used on input line 64.
+(pdftex.def)             Requested size: 391.28378pt x 213.06024pt.
 
-Package natbib Warning: Empty `thebibliography' environment on input line 3.
-
-)
 pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.73 \end{document}
-                    [1] (./proposal.aux)
+l.74 
+      [1 <./figs/Overview.pdf>] (./proposal.bbl [2]) [3] (./proposal.aux)
 Package rerunfilecheck Info: File `proposal.out' has not changed.
-(rerunfilecheck)             Checksum: 6EB5B93AB773464FE18C2950E04DC8A7;1319.
+(rerunfilecheck)             Checksum: 8EFF35643600E392CF44A2D74136B427;1506.
  ) 
 Here is how much of TeX's memory you used:
- 13077 strings out of 476025
- 214770 string characters out of 5790017
- 1855388 words of memory out of 5000000
- 33337 multiletter control sequences out of 15000+600000
- 515101 words of font info for 41 fonts, out of 8000000 for 9000
+ 13117 strings out of 476025
+ 215422 string characters out of 5790017
+ 1862388 words of memory out of 5000000
+ 33360 multiletter control sequences out of 15000+600000
+ 515447 words of font info for 42 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,5n,77p,805b,481s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb>
-Output written on proposal.pdf (2 pages, 58977 bytes).
+ 75i,6n,77p,981b,548s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
+Output written on proposal.pdf (4 pages, 117531 bytes).
 PDF statistics:
- 74 PDF objects out of 1000 (max. 8388607)
- 63 compressed objects within 1 object stream
- 12 named destinations out of 1000 (max. 500000)
- 81 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 128 PDF objects out of 1000 (max. 8388607)
+ 104 compressed objects within 2 object streams
+ 26 named destinations out of 1000 (max. 500000)
+ 94 words of extra memory for PDF output out of 10000 (max. 10000000)
 

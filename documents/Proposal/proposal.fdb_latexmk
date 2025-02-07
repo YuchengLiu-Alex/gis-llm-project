@@ -1,14 +1,14 @@
 # Fdb version 4
-["bibtex proposal"] 1738841182 "proposal.aux" "proposal.bbl" "proposal" 1738841183 0
-  "./references.bib" 1738839207 0 d41d8cd98f00b204e9800998ecf8427e ""
+["bibtex proposal"] 1738882142 "proposal.aux" "proposal.bbl" "proposal" 1738895460 0
+  "./references.bib" 1738879908 522 ae44dc06e3e5e83156679fbfba60abd2 ""
   "/usr/local/texlive/2023/texmf-dist/bibtex/bst/chicago/chicago.bst" 1198629289 37416 2ae04276c51f11eda70770f4081293b7 ""
-  "proposal.aux" 1738841183 1808 f567c7d93557a692b6318b5a7ee90698 "pdflatex"
+  "proposal.aux" 1738895460 2506 3471fca57728a0dfc5f77d93455b2131 "pdflatex"
   (generated)
   "proposal.bbl"
   "proposal.blg"
   (rewritten before read)
-["pdflatex"] 1738841182 "/Users/liuyucheng/Desktop/DSCI551/Project/documents/Proposal/proposal.tex" "proposal.pdf" "proposal" 1738841183 0
-  "/Users/liuyucheng/Desktop/DSCI551/Project/documents/Proposal/proposal.tex" 1738841181 2713 161b7107123c5a18de14f86ec293aa59 ""
+["pdflatex"] 1738895459 "/Users/liuyucheng/Desktop/DSCI551/Project/documents/Proposal/proposal.tex" "proposal.pdf" "proposal" 1738895460 0
+  "/Users/liuyucheng/Desktop/DSCI551/Project/documents/Proposal/proposal.tex" 1738895459 9287 ac5412d839b0a8dded2e25be427206de ""
   "/usr/local/texlive/2023/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/tfm/adobe/symbol/psyr.tfm" 1136768653 1408 5937f58aa508ea2cea4901c07d10f5fe ""
   "/usr/local/texlive/2023/texmf-dist/fonts/tfm/adobe/zapfding/pzdr.tfm" 1136768653 1528 f853c4d1b4e0550255e02831fdc8496f ""
@@ -16,9 +16,11 @@
   "/usr/local/texlive/2023/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm" 1136768653 1324 c910af8c371558dc20f2d7822f66fe64 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/tfm/public/cm/cmr12.tfm" 1136768653 1288 655e228510b4c2a1abe905c368440826 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/tfm/public/cm/cmr17.tfm" 1136768653 1292 296a67155bdbfc32aa9c636f21e91433 ""
+  "/usr/local/texlive/2023/texmf-dist/fonts/tfm/public/cm/cmti10.tfm" 1136768653 1480 aa8e34af0eb6a2941b776984cf1dfdc4 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb" 1248133631 34811 78b52f49e893bcba91bd7581cdc144c0 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb" 1248133631 32080 340ef9bf63678554ee606688e7b5339d ""
   "/usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb" 1248133631 35752 024fb6c41858982481f6968b5fc26508 ""
+  "/usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb" 1248133631 37944 359e864bd06cde3b1cf57bb20757fb06 ""
   "/usr/local/texlive/2023/texmf-dist/tex/context/base/mkii/supp-pdf.mkii" 1461363279 71627 94eb9990bed73c364d7f53f960cc8c5b ""
   "/usr/local/texlive/2023/texmf-dist/tex/generic/atbegshi/atbegshi.sty" 1575674566 24708 5584a51a7101caf7e6bbf1fc27d8f7b1 ""
   "/usr/local/texlive/2023/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty" 1576625341 40635 c40361e206be584d448876bba8a64a3b ""
@@ -97,10 +99,11 @@
   "/usr/local/texlive/2023/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1696229159 4623355 b8cad38412faebe1ce5b780a45db67bd ""
   "/usr/local/texlive/2023/texmf-var/web2c/pdftex/pdflatex.fmt" 1696229102 7883455 ec23c51f25feae536fabd98dc8c9b403 ""
   "/usr/local/texlive/2023/texmf.cnf" 1678822455 577 1b2b1af17af2508fb20dd85783af4050 ""
-  "proposal.aux" 1738841183 1808 f567c7d93557a692b6318b5a7ee90698 "pdflatex"
-  "proposal.bbl" 1738841182 49 0eba253fc001332e731e8aba3f23127b "bibtex proposal"
-  "proposal.out" 1738841183 1319 6eb5b93ab773464fe18c2950e04dc8a7 "pdflatex"
-  "proposal.tex" 1738841181 2713 161b7107123c5a18de14f86ec293aa59 ""
+  "figs/Overview.pdf" 1738878266 32636 226f6ab3fb66ef26c2a5e17a1ffc491b ""
+  "proposal.aux" 1738895460 2506 3471fca57728a0dfc5f77d93455b2131 "pdflatex"
+  "proposal.bbl" 1738882142 646 67afd3bd9226999f3bf1c6990782566d "bibtex proposal"
+  "proposal.out" 1738895460 1506 8eff35643600e392cf44a2d74136b427 "pdflatex"
+  "proposal.tex" 1738895459 9287 ac5412d839b0a8dded2e25be427206de ""
   (generated)
   "proposal.aux"
   "proposal.log"

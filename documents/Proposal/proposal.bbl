@@ -1,3 +1,12 @@
 \begin{thebibliography}{}
 
+\bibitem[\protect\citeauthoryear{Radford}{Radford}{2018}]{radford2018improving}
+Radford, A. (2018).
+\newblock Improving language understanding by generative pre-training.
+
+\bibitem[\protect\citeauthoryear{Touvron, Lavril, Izacard, Martinet, Lachaux, Lacroix, Rozi{\`e}re, Goyal, Hambro, Azhar, et~al.}{Touvron et~al.}{2023}]{touvron2023llama}
+Touvron, H., T.~Lavril, G.~Izacard, X.~Martinet, M.-A. Lachaux, T.~Lacroix, B.~Rozi{\`e}re, N.~Goyal, E.~Hambro, F.~Azhar, et~al. (2023).
+\newblock Llama: Open and efficient foundation language models.
+\newblock {\em arXiv preprint arXiv:2302.13971\/}.
+
 \end{thebibliography}
