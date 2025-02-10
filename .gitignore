@@ -1,0 +1,49 @@
+# 忽略数据库文件
+*.db
+*.sqlite
+*.sql
+*.pgsql
+*.pgdump
+
+# 忽略 GeoJSON、Shapefile 等大数据文件
+*.geojson
+*.shp
+*.shx
+*.dbf
+*.prj
+*.qix
+*.zip
+
+# 忽略 PostgreSQL/PostGIS 相关文件
+pgdata/
+postgis-data/
+*.backup
+*.log
+
+# 忽略 Python/Node.js 相关的缓存文件
+__pycache__/
+*.pyc
+*.pyo
+node_modules/
+.env
+
+# 忽略 Jupyter Notebook 产生的临时文件
+.ipynb_checkpoints/
+
+# 忽略大文件（可以用 Git LFS 处理）
+*.tif
+*.tiff
+*.png
+*.jpg
+*.csv
+*.tsv
+*.xlsx
+*.h5
+
+# 忽略 IDE/编辑器相关文件
+.vscode/
+.idea/
+.DS_Store
+*.swp
+
+data/
