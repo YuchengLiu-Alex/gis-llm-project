@@ -46,4 +46,4 @@ node_modules/
 .DS_Store
 *.swp
 
-data/
+data/ # 新增忽略文件夹
