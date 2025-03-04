@@ -1,18 +1,3 @@
 \begin{thebibliography}{}
 
-\bibitem[\protect\citeauthoryear{Achiam, Adler, Agarwal, Ahmad, Akkaya, Aleman, Almeida, Altenschmidt, Altman, Anadkat, et~al.}{Achiam et~al.}{2023}]{achiam2023gpt}
-Achiam, J., S.~Adler, S.~Agarwal, L.~Ahmad, I.~Akkaya, F.~L. Aleman, D.~Almeida, J.~Altenschmidt, S.~Altman, S.~Anadkat, et~al. (2023).
-\newblock Gpt-4 technical report.
-\newblock {\em arXiv preprint arXiv:2303.08774\/}.
-
-\bibitem[\protect\citeauthoryear{Obe and Hsu}{Obe and Hsu}{2021}]{obe2021postgis}
-Obe, R. and L.~S. Hsu (2021).
-\newblock {\em PostGIS in action}.
-\newblock Simon and Schuster.
-
-\bibitem[\protect\citeauthoryear{Touvron, Lavril, Izacard, Martinet, Lachaux, Lacroix, Rozi{\`e}re, Goyal, Hambro, Azhar, et~al.}{Touvron et~al.}{2023}]{touvron2023llama}
-Touvron, H., T.~Lavril, G.~Izacard, X.~Martinet, M.-A. Lachaux, T.~Lacroix, B.~Rozi{\`e}re, N.~Goyal, E.~Hambro, F.~Azhar, et~al. (2023).
-\newblock Llama: Open and efficient foundation language models.
-\newblock {\em arXiv preprint arXiv:2302.13971\/}.
-
 \end{thebibliography}

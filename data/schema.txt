@@ -1,0 +1,3058 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 17.2 (Debian 17.2-1.pgdg110+1)
+-- Dumped by pg_dump version 17.4 (Homebrew)
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: california; Type: SCHEMA; Schema: -; Owner: chatgis
+--
+
+CREATE SCHEMA california;
+
+
+ALTER SCHEMA california OWNER TO chatgis;
+
+--
+-- Name: norcal; Type: SCHEMA; Schema: -; Owner: chatgis
+--
+
+CREATE SCHEMA norcal;
+
+
+ALTER SCHEMA norcal OWNER TO chatgis;
+
+--
+-- Name: socal; Type: SCHEMA; Schema: -; Owner: chatgis
+--
+
+CREATE SCHEMA socal;
+
+
+ALTER SCHEMA socal OWNER TO chatgis;
+
+--
+-- Name: tiger; Type: SCHEMA; Schema: -; Owner: chatgis
+--
+
+CREATE SCHEMA tiger;
+
+
+ALTER SCHEMA tiger OWNER TO chatgis;
+
+--
+-- Name: tiger_data; Type: SCHEMA; Schema: -; Owner: chatgis
+--
+
+CREATE SCHEMA tiger_data;
+
+
+ALTER SCHEMA tiger_data OWNER TO chatgis;
+
+--
+-- Name: topology; Type: SCHEMA; Schema: -; Owner: chatgis
+--
+
+CREATE SCHEMA topology;
+
+
+ALTER SCHEMA topology OWNER TO chatgis;
+
+--
+-- Name: SCHEMA topology; Type: COMMENT; Schema: -; Owner: chatgis
+--
+
+COMMENT ON SCHEMA topology IS 'PostGIS Topology schema';
+
+
+--
+-- Name: fuzzystrmatch; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS fuzzystrmatch WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION fuzzystrmatch; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION fuzzystrmatch IS 'determine similarities and distance between strings';
+
+
+--
+-- Name: postgis; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS postgis WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION postgis; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION postgis IS 'PostGIS geometry and geography spatial types and functions';
+
+
+--
+-- Name: postgis_tiger_geocoder; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS postgis_tiger_geocoder WITH SCHEMA tiger;
+
+
+--
+-- Name: EXTENSION postgis_tiger_geocoder; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION postgis_tiger_geocoder IS 'PostGIS tiger geocoder and reverse geocoder';
+
+
+--
+-- Name: postgis_topology; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS postgis_topology WITH SCHEMA topology;
+
+
+--
+-- Name: EXTENSION postgis_topology; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION postgis_topology IS 'PostGIS topology spatial types and functions';
+
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: buildings_a; Type: TABLE; Schema: norcal; Owner: chatgis
+--
+
+CREATE TABLE norcal.buildings_a (
+    gid integer NOT NULL,
+    osm_id character varying(12),
+    code smallint,
+    fclass character varying(28),
+    name character varying(100),
+    type character varying(20),
+    geom public.geometry(MultiPolygon,4326)
+);
+
+
+ALTER TABLE norcal.buildings_a OWNER TO chatgis;
+
+--
+-- Name: buildings_a; Type: TABLE; Schema: socal; Owner: chatgis
+--
+
+CREATE TABLE socal.buildings_a (
+    gid integer NOT NULL,
+    osm_id character varying(12),
+    code smallint,
+    fclass character varying(28),
+    name character varying(100),
+    type character varying(20),
+    geom public.geometry(MultiPolygon,4326)
+);
+
+
+ALTER TABLE socal.buildings_a OWNER TO chatgis;
+
+--
+-- Name: buildings_a; Type: MATERIALIZED VIEW; Schema: california; Owner: chatgis
+--
+
+CREATE MATERIALIZED VIEW california.buildings_a AS
+ SELECT buildings_a.gid,
+    buildings_a.osm_id,
+    buildings_a.code,
+    buildings_a.fclass,
+    buildings_a.name,
+    buildings_a.type,
+    buildings_a.geom
+   FROM socal.buildings_a
+UNION ALL
+ SELECT buildings_a.gid,
+    buildings_a.osm_id,
+    buildings_a.code,
+    buildings_a.fclass,
+    buildings_a.name,
+    buildings_a.type,
+    buildings_a.geom
+   FROM norcal.buildings_a
+  WITH NO DATA;
+
+
+ALTER MATERIALIZED VIEW california.buildings_a OWNER TO chatgis;
+
+--
+-- Name: landuse_a; Type: TABLE; Schema: norcal; Owner: chatgis
+--
+
+CREATE TABLE norcal.landuse_a (
+    gid integer NOT NULL,
+    osm_id character varying(12),
+    code smallint,
+    fclass character varying(28),
+    name character varying(100),
+    geom public.geometry(MultiPolygon,4326)
+);
+
+
+ALTER TABLE norcal.landuse_a OWNER TO chatgis;
+
+--
+-- Name: landuse_a; Type: TABLE; Schema: socal; Owner: chatgis
+--
+
+CREATE TABLE socal.landuse_a (
+    gid integer NOT NULL,
+    osm_id character varying(12),
+    code smallint,
+    fclass character varying(28),
+    name character varying(100),
+    geom public.geometry(MultiPolygon,4326)
+);
+
+
+ALTER TABLE socal.landuse_a OWNER TO chatgis;
+
+--
+-- Name: landuse_a; Type: MATERIALIZED VIEW; Schema: california; Owner: chatgis
+--
+
+CREATE MATERIALIZED VIEW california.landuse_a AS
+ SELECT landuse_a.gid,
+    landuse_a.osm_id,
+    landuse_a.code,
+    landuse_a.fclass,
+    landuse_a.name,
+    landuse_a.geom
+   FROM socal.landuse_a
+UNION ALL
+ SELECT landuse_a.gid,
+    landuse_a.osm_id,
+    landuse_a.code,
+    landuse_a.fclass,
+    landuse_a.name,
+    landuse_a.geom
+   FROM norcal.landuse_a
+  WITH NO DATA;
+
+
+ALTER MATERIALIZED VIEW california.landuse_a OWNER TO chatgis;
+
+--
+-- Name: natural; Type: TABLE; Schema: norcal; Owner: chatgis
+--
+
+CREATE TABLE norcal."natural" (
+    gid integer NOT NULL,
+    osm_id character varying(12),
+    code smallint,
+    fclass character varying(28),
+    name character varying(100),
+    geom public.geometry(Point,4326)
+);
+
+
+ALTER TABLE norcal."natural" OWNER TO chatgis;
+
+--
+-- Name: natural; Type: TABLE; Schema: socal; Owner: chatgis
+--
+
+CREATE TABLE socal."natural" (
+    gid integer NOT NULL,
+    osm_id character varying(12),
+    code smallint,
+    fclass character varying(28),
+    name character varying(100),
+    geom public.geometry(Point,4326)
+);
+
+
+ALTER TABLE socal."natural" OWNER TO chatgis;
+
+--
+-- Name: natural; Type: MATERIALIZED VIEW; Schema: california; Owner: chatgis
+--
+
+CREATE MATERIALIZED VIEW california."natural" AS
+ SELECT "natural".gid,
+    "natural".osm_id,
+    "natural".code,
+    "natural".fclass,
+    "natural".name,
+    "natural".geom
+   FROM socal."natural"
+UNION ALL
+ SELECT "natural".gid,
+    "natural".osm_id,
+    "natural".code,
+    "natural".fclass,
+    "natural".name,
+    "natural".geom
+   FROM norcal."natural"
+  WITH NO DATA;
+
+
+ALTER MATERIALIZED VIEW california."natural" OWNER TO chatgis;
+
+--
+-- Name: natural_a; Type: TABLE; Schema: norcal; Owner: chatgis
+--
+
+CREATE TABLE norcal.natural_a (
+    gid integer NOT NULL,
+    osm_id character varying(12),
+    code smallint,
+    fclass character varying(28),
+    name character varying(100),
+    geom public.geometry(MultiPolygon,4326)
+);
+
+
+ALTER TABLE norcal.natural_a OWNER TO chatgis;
+
+--
+-- Name: natural_a; Type: TABLE; Schema: socal; Owner: chatgis
+--
+
+CREATE TABLE socal.natural_a (
+    gid integer NOT NULL,
+    osm_id character varying(12),
+    code smallint,
+    fclass character varying(28),
+    name character varying(100),
+    geom public.geometry(MultiPolygon,4326)
+);
+
+
+ALTER TABLE socal.natural_a OWNER TO chatgis;
+
+--
+-- Name: natural_a; Type: MATERIALIZED VIEW; Schema: california; Owner: chatgis
+--
+
+CREATE MATERIALIZED VIEW california.natural_a AS
+ SELECT natural_a.gid,
+    natural_a.osm_id,
+    natural_a.code,
+    natural_a.fclass,
+    natural_a.name,
+    natural_a.geom
+   FROM socal.natural_a
+UNION ALL
+ SELECT natural_a.gid,
+    natural_a.osm_id,
+    natural_a.code,
+    natural_a.fclass,
+    natural_a.name,
+    natural_a.geom
+   FROM norcal.natural_a
+  WITH NO DATA;
+
+
+ALTER MATERIALIZED VIEW california.natural_a OWNER TO chatgis;
+
+--
+-- Name: places; Type: TABLE; Schema: norcal; Owner: chatgis
+--
+
+CREATE TABLE norcal.places (
+    gid integer NOT NULL,
+    osm_id character varying(12),
+    code smallint,
+    fclass character varying(28),
+    population double precision,
+    name character varying(100),
+    geom public.geometry(Point,4326)
+);
+
+
+ALTER TABLE norcal.places OWNER TO chatgis;
+
+--
+-- Name: places; Type: TABLE; Schema: socal; Owner: chatgis
+--
+
+CREATE TABLE socal.places (
+    gid integer NOT NULL,
+    osm_id character varying(12),
+    code smallint,
+    fclass character varying(28),
+    population double precision,
+    name character varying(100),
+    geom public.geometry(Point,4326)
+);
+
+
+ALTER TABLE socal.places OWNER TO chatgis;
+
+--
+-- Name: places; Type: MATERIALIZED VIEW; Schema: california; Owner: chatgis
+--
+
+CREATE MATERIALIZED VIEW california.places AS
+ SELECT places.gid,
+    places.osm_id,
+    places.code,
+    places.fclass,
+    places.population,
+    places.name,
+    places.geom
+   FROM socal.places
+UNION ALL
+ SELECT places.gid,
+    places.osm_id,
+    places.code,
+    places.fclass,
+    places.population,
+    places.name,
+    places.geom
+   FROM norcal.places
+  WITH NO DATA;
+
+
+ALTER MATERIALIZED VIEW california.places OWNER TO chatgis;
+
+--
+-- Name: places_a; Type: TABLE; Schema: norcal; Owner: chatgis
+--
+
+CREATE TABLE norcal.places_a (
+    gid integer NOT NULL,
+    osm_id character varying(12),
+    code smallint,
+    fclass character varying(28),
+    population double precision,
+    name character varying(100),
+    geom public.geometry(MultiPolygon,4326)
+);
+
+
+ALTER TABLE norcal.places_a OWNER TO chatgis;
+
+--
+-- Name: places_a; Type: TABLE; Schema: socal; Owner: chatgis
+--
+
+CREATE TABLE socal.places_a (
+    gid integer NOT NULL,
+    osm_id character varying(12),
+    code smallint,
+    fclass character varying(28),
+    population double precision,
+    name character varying(100),
+    geom public.geometry(MultiPolygon,4326)
+);
+
+
+ALTER TABLE socal.places_a OWNER TO chatgis;
+
+--
+-- Name: places_a; Type: MATERIALIZED VIEW; Schema: california; Owner: chatgis
+--
+
+CREATE MATERIALIZED VIEW california.places_a AS
+ SELECT places_a.gid,
+    places_a.osm_id,
+    places_a.code,
+    places_a.fclass,
+    places_a.population,
+    places_a.name,
+    places_a.geom
+   FROM socal.places_a
+UNION ALL
+ SELECT places_a.gid,
+    places_a.osm_id,
+    places_a.code,
+    places_a.fclass,
+    places_a.population,
+    places_a.name,
+    places_a.geom
+   FROM norcal.places_a
+  WITH NO DATA;
+
+
+ALTER MATERIALIZED VIEW california.places_a OWNER TO chatgis;
+
+--
+-- Name: pofw; Type: TABLE; Schema: norcal; Owner: chatgis
+--
+
+CREATE TABLE norcal.pofw (
+    gid integer NOT NULL,
+    osm_id character varying(12),
+    code smallint,
+    fclass character varying(28),
+    name character varying(100),
+    geom public.geometry(Point,4326)
+);
+
+
+ALTER TABLE norcal.pofw OWNER TO chatgis;
+
+--
+-- Name: pofw; Type: TABLE; Schema: socal; Owner: chatgis
+--
+
+CREATE TABLE socal.pofw (
+    gid integer NOT NULL,
+    osm_id character varying(12),
+    code smallint,
+    fclass character varying(28),
+    name character varying(100),
+    geom public.geometry(Point,4326)
+);
+
+
+ALTER TABLE socal.pofw OWNER TO chatgis;
+
+--
+-- Name: pofw; Type: MATERIALIZED VIEW; Schema: california; Owner: chatgis
+--
+
+CREATE MATERIALIZED VIEW california.pofw AS
+ SELECT pofw.gid,
+    pofw.osm_id,
+    pofw.code,
+    pofw.fclass,
+    pofw.name,
+    pofw.geom
+   FROM socal.pofw
+UNION ALL
+ SELECT pofw.gid,
+    pofw.osm_id,
+    pofw.code,
+    pofw.fclass,
+    pofw.name,
+    pofw.geom
+   FROM norcal.pofw
+  WITH NO DATA;
+
+
+ALTER MATERIALIZED VIEW california.pofw OWNER TO chatgis;
+
+--
+-- Name: pofw_a; Type: TABLE; Schema: norcal; Owner: chatgis
+--
+
+CREATE TABLE norcal.pofw_a (
+    gid integer NOT NULL,
+    osm_id character varying(12),
+    code smallint,
+    fclass character varying(28),
+    name character varying(100),
+    geom public.geometry(MultiPolygon,4326)
+);
+
+
+ALTER TABLE norcal.pofw_a OWNER TO chatgis;
+
+--
+-- Name: pofw_a; Type: TABLE; Schema: socal; Owner: chatgis
+--
+
+CREATE TABLE socal.pofw_a (
+    gid integer NOT NULL,
+    osm_id character varying(12),
+    code smallint,
+    fclass character varying(28),
+    name character varying(100),
+    geom public.geometry(MultiPolygon,4326)
+);
+
+
+ALTER TABLE socal.pofw_a OWNER TO chatgis;
+
+--
+-- Name: pofw_a; Type: MATERIALIZED VIEW; Schema: california; Owner: chatgis
+--
+
+CREATE MATERIALIZED VIEW california.pofw_a AS
+ SELECT pofw_a.gid,
+    pofw_a.osm_id,
+    pofw_a.code,
+    pofw_a.fclass,
+    pofw_a.name,
+    pofw_a.geom
+   FROM socal.pofw_a
+UNION ALL
+ SELECT pofw_a.gid,
+    pofw_a.osm_id,
+    pofw_a.code,
+    pofw_a.fclass,
+    pofw_a.name,
+    pofw_a.geom
+   FROM norcal.pofw_a
+  WITH NO DATA;
+
+
+ALTER MATERIALIZED VIEW california.pofw_a OWNER TO chatgis;
+
+--
+-- Name: pois; Type: TABLE; Schema: norcal; Owner: chatgis
+--
+
+CREATE TABLE norcal.pois (
+    gid integer NOT NULL,
+    osm_id character varying(12),
+    code smallint,
+    fclass character varying(28),
+    name character varying(100),
+    geom public.geometry(Point,4326)
+);
+
+
+ALTER TABLE norcal.pois OWNER TO chatgis;
+
+--
+-- Name: pois; Type: TABLE; Schema: socal; Owner: chatgis
+--
+
+CREATE TABLE socal.pois (
+    gid integer NOT NULL,
+    osm_id character varying(12),
+    code smallint,
+    fclass character varying(28),
+    name character varying(100),
+    geom public.geometry(Point,4326)
+);
+
+
+ALTER TABLE socal.pois OWNER TO chatgis;
+
+--
+-- Name: pois; Type: MATERIALIZED VIEW; Schema: california; Owner: chatgis
+--
+
+CREATE MATERIALIZED VIEW california.pois AS
+ SELECT pois.gid,
+    pois.osm_id,
+    pois.code,
+    pois.fclass,
+    pois.name,
+    pois.geom
+   FROM socal.pois
+UNION ALL
+ SELECT pois.gid,
+    pois.osm_id,
+    pois.code,
+    pois.fclass,
+    pois.name,
+    pois.geom
+   FROM norcal.pois
+  WITH NO DATA;
+
+
+ALTER MATERIALIZED VIEW california.pois OWNER TO chatgis;
+
+--
+-- Name: pois_a; Type: TABLE; Schema: norcal; Owner: chatgis
+--
+
+CREATE TABLE norcal.pois_a (
+    gid integer NOT NULL,
+    osm_id character varying(12),
+    code smallint,
+    fclass character varying(28),
+    name character varying(100),
+    geom public.geometry(MultiPolygon,4326)
+);
+
+
+ALTER TABLE norcal.pois_a OWNER TO chatgis;
+
+--
+-- Name: pois_a; Type: TABLE; Schema: socal; Owner: chatgis
+--
+
+CREATE TABLE socal.pois_a (
+    gid integer NOT NULL,
+    osm_id character varying(12),
+    code smallint,
+    fclass character varying(28),
+    name character varying(100),
+    geom public.geometry(MultiPolygon,4326)
+);
+
+
+ALTER TABLE socal.pois_a OWNER TO chatgis;
+
+--
+-- Name: pois_a; Type: MATERIALIZED VIEW; Schema: california; Owner: chatgis
+--
+
+CREATE MATERIALIZED VIEW california.pois_a AS
+ SELECT pois_a.gid,
+    pois_a.osm_id,
+    pois_a.code,
+    pois_a.fclass,
+    pois_a.name,
+    pois_a.geom
+   FROM socal.pois_a
+UNION ALL
+ SELECT pois_a.gid,
+    pois_a.osm_id,
+    pois_a.code,
+    pois_a.fclass,
+    pois_a.name,
+    pois_a.geom
+   FROM norcal.pois_a
+  WITH NO DATA;
+
+
+ALTER MATERIALIZED VIEW california.pois_a OWNER TO chatgis;
+
+--
+-- Name: railways; Type: TABLE; Schema: norcal; Owner: chatgis
+--
+
+CREATE TABLE norcal.railways (
+    gid integer NOT NULL,
+    osm_id character varying(12),
+    code smallint,
+    fclass character varying(28),
+    name character varying(100),
+    layer double precision,
+    bridge character varying(1),
+    tunnel character varying(1),
+    geom public.geometry(MultiLineString,4326)
+);
+
+
+ALTER TABLE norcal.railways OWNER TO chatgis;
+
+--
+-- Name: railways; Type: TABLE; Schema: socal; Owner: chatgis
+--
+
+CREATE TABLE socal.railways (
+    gid integer NOT NULL,
+    osm_id character varying(12),
+    code smallint,
+    fclass character varying(28),
+    name character varying(100),
+    layer double precision,
+    bridge character varying(1),
+    tunnel character varying(1),
+    geom public.geometry(MultiLineString,4326)
+);
+
+
+ALTER TABLE socal.railways OWNER TO chatgis;
+
+--
+-- Name: railways; Type: MATERIALIZED VIEW; Schema: california; Owner: chatgis
+--
+
+CREATE MATERIALIZED VIEW california.railways AS
+ SELECT railways.gid,
+    railways.osm_id,
+    railways.code,
+    railways.fclass,
+    railways.name,
+    railways.layer,
+    railways.bridge,
+    railways.tunnel,
+    railways.geom
+   FROM socal.railways
+UNION ALL
+ SELECT railways.gid,
+    railways.osm_id,
+    railways.code,
+    railways.fclass,
+    railways.name,
+    railways.layer,
+    railways.bridge,
+    railways.tunnel,
+    railways.geom
+   FROM norcal.railways
+  WITH NO DATA;
+
+
+ALTER MATERIALIZED VIEW california.railways OWNER TO chatgis;
+
+--
+-- Name: roads; Type: TABLE; Schema: norcal; Owner: chatgis
+--
+
+CREATE TABLE norcal.roads (
+    gid integer NOT NULL,
+    osm_id character varying(12),
+    code smallint,
+    fclass character varying(28),
+    name character varying(100),
+    ref character varying(20),
+    oneway character varying(1),
+    maxspeed smallint,
+    layer double precision,
+    bridge character varying(1),
+    tunnel character varying(1),
+    geom public.geometry(MultiLineString,4326)
+);
+
+
+ALTER TABLE norcal.roads OWNER TO chatgis;
+
+--
+-- Name: roads; Type: TABLE; Schema: socal; Owner: chatgis
+--
+
+CREATE TABLE socal.roads (
+    gid integer NOT NULL,
+    osm_id character varying(12),
+    code smallint,
+    fclass character varying(28),
+    name character varying(100),
+    ref character varying(20),
+    oneway character varying(1),
+    maxspeed smallint,
+    layer double precision,
+    bridge character varying(1),
+    tunnel character varying(1),
+    geom public.geometry(MultiLineString,4326)
+);
+
+
+ALTER TABLE socal.roads OWNER TO chatgis;
+
+--
+-- Name: roads; Type: MATERIALIZED VIEW; Schema: california; Owner: chatgis
+--
+
+CREATE MATERIALIZED VIEW california.roads AS
+ SELECT roads.gid,
+    roads.osm_id,
+    roads.code,
+    roads.fclass,
+    roads.name,
+    roads.ref,
+    roads.oneway,
+    roads.maxspeed,
+    roads.layer,
+    roads.bridge,
+    roads.tunnel,
+    roads.geom
+   FROM socal.roads
+UNION ALL
+ SELECT roads.gid,
+    roads.osm_id,
+    roads.code,
+    roads.fclass,
+    roads.name,
+    roads.ref,
+    roads.oneway,
+    roads.maxspeed,
+    roads.layer,
+    roads.bridge,
+    roads.tunnel,
+    roads.geom
+   FROM norcal.roads
+  WITH NO DATA;
+
+
+ALTER MATERIALIZED VIEW california.roads OWNER TO chatgis;
+
+--
+-- Name: traffic; Type: TABLE; Schema: norcal; Owner: chatgis
+--
+
+CREATE TABLE norcal.traffic (
+    gid integer NOT NULL,
+    osm_id character varying(12),
+    code smallint,
+    fclass character varying(28),
+    name character varying(100),
+    geom public.geometry(Point,4326)
+);
+
+
+ALTER TABLE norcal.traffic OWNER TO chatgis;
+
+--
+-- Name: traffic; Type: TABLE; Schema: socal; Owner: chatgis
+--
+
+CREATE TABLE socal.traffic (
+    gid integer NOT NULL,
+    osm_id character varying(12),
+    code smallint,
+    fclass character varying(28),
+    name character varying(100),
+    geom public.geometry(Point,4326)
+);
+
+
+ALTER TABLE socal.traffic OWNER TO chatgis;
+
+--
+-- Name: traffic; Type: MATERIALIZED VIEW; Schema: california; Owner: chatgis
+--
+
+CREATE MATERIALIZED VIEW california.traffic AS
+ SELECT traffic.gid,
+    traffic.osm_id,
+    traffic.code,
+    traffic.fclass,
+    traffic.name,
+    traffic.geom
+   FROM socal.traffic
+UNION ALL
+ SELECT traffic.gid,
+    traffic.osm_id,
+    traffic.code,
+    traffic.fclass,
+    traffic.name,
+    traffic.geom
+   FROM norcal.traffic
+  WITH NO DATA;
+
+
+ALTER MATERIALIZED VIEW california.traffic OWNER TO chatgis;
+
+--
+-- Name: traffic_a; Type: TABLE; Schema: norcal; Owner: chatgis
+--
+
+CREATE TABLE norcal.traffic_a (
+    gid integer NOT NULL,
+    osm_id character varying(12),
+    code smallint,
+    fclass character varying(28),
+    name character varying(100),
+    geom public.geometry(MultiPolygon,4326)
+);
+
+
+ALTER TABLE norcal.traffic_a OWNER TO chatgis;
+
+--
+-- Name: traffic_a; Type: TABLE; Schema: socal; Owner: chatgis
+--
+
+CREATE TABLE socal.traffic_a (
+    gid integer NOT NULL,
+    osm_id character varying(12),
+    code smallint,
+    fclass character varying(28),
+    name character varying(100),
+    geom public.geometry(MultiPolygon,4326)
+);
+
+
+ALTER TABLE socal.traffic_a OWNER TO chatgis;
+
+--
+-- Name: traffic_a; Type: MATERIALIZED VIEW; Schema: california; Owner: chatgis
+--
+
+CREATE MATERIALIZED VIEW california.traffic_a AS
+ SELECT traffic_a.gid,
+    traffic_a.osm_id,
+    traffic_a.code,
+    traffic_a.fclass,
+    traffic_a.name,
+    traffic_a.geom
+   FROM socal.traffic_a
+UNION ALL
+ SELECT traffic_a.gid,
+    traffic_a.osm_id,
+    traffic_a.code,
+    traffic_a.fclass,
+    traffic_a.name,
+    traffic_a.geom
+   FROM norcal.traffic_a
+  WITH NO DATA;
+
+
+ALTER MATERIALIZED VIEW california.traffic_a OWNER TO chatgis;
+
+--
+-- Name: transport; Type: TABLE; Schema: norcal; Owner: chatgis
+--
+
+CREATE TABLE norcal.transport (
+    gid integer NOT NULL,
+    osm_id character varying(12),
+    code smallint,
+    fclass character varying(28),
+    name character varying(100),
+    geom public.geometry(Point,4326)
+);
+
+
+ALTER TABLE norcal.transport OWNER TO chatgis;
+
+--
+-- Name: transport; Type: TABLE; Schema: socal; Owner: chatgis
+--
+
+CREATE TABLE socal.transport (
+    gid integer NOT NULL,
+    osm_id character varying(12),
+    code smallint,
+    fclass character varying(28),
+    name character varying(100),
+    geom public.geometry(Point,4326)
+);
+
+
+ALTER TABLE socal.transport OWNER TO chatgis;
+
+--
+-- Name: transport; Type: MATERIALIZED VIEW; Schema: california; Owner: chatgis
+--
+
+CREATE MATERIALIZED VIEW california.transport AS
+ SELECT transport.gid,
+    transport.osm_id,
+    transport.code,
+    transport.fclass,
+    transport.name,
+    transport.geom
+   FROM socal.transport
+UNION ALL
+ SELECT transport.gid,
+    transport.osm_id,
+    transport.code,
+    transport.fclass,
+    transport.name,
+    transport.geom
+   FROM norcal.transport
+  WITH NO DATA;
+
+
+ALTER MATERIALIZED VIEW california.transport OWNER TO chatgis;
+
+--
+-- Name: transport_a; Type: TABLE; Schema: norcal; Owner: chatgis
+--
+
+CREATE TABLE norcal.transport_a (
+    gid integer NOT NULL,
+    osm_id character varying(12),
+    code smallint,
+    fclass character varying(28),
+    name character varying(100),
+    geom public.geometry(MultiPolygon,4326)
+);
+
+
+ALTER TABLE norcal.transport_a OWNER TO chatgis;
+
+--
+-- Name: transport_a; Type: TABLE; Schema: socal; Owner: chatgis
+--
+
+CREATE TABLE socal.transport_a (
+    gid integer NOT NULL,
+    osm_id character varying(12),
+    code smallint,
+    fclass character varying(28),
+    name character varying(100),
+    geom public.geometry(MultiPolygon,4326)
+);
+
+
+ALTER TABLE socal.transport_a OWNER TO chatgis;
+
+--
+-- Name: transport_a; Type: MATERIALIZED VIEW; Schema: california; Owner: chatgis
+--
+
+CREATE MATERIALIZED VIEW california.transport_a AS
+ SELECT transport_a.gid,
+    transport_a.osm_id,
+    transport_a.code,
+    transport_a.fclass,
+    transport_a.name,
+    transport_a.geom
+   FROM socal.transport_a
+UNION ALL
+ SELECT transport_a.gid,
+    transport_a.osm_id,
+    transport_a.code,
+    transport_a.fclass,
+    transport_a.name,
+    transport_a.geom
+   FROM norcal.transport_a
+  WITH NO DATA;
+
+
+ALTER MATERIALIZED VIEW california.transport_a OWNER TO chatgis;
+
+--
+-- Name: water_a; Type: TABLE; Schema: norcal; Owner: chatgis
+--
+
+CREATE TABLE norcal.water_a (
+    gid integer NOT NULL,
+    osm_id character varying(12),
+    code smallint,
+    fclass character varying(28),
+    name character varying(100),
+    geom public.geometry(MultiPolygon,4326)
+);
+
+
+ALTER TABLE norcal.water_a OWNER TO chatgis;
+
+--
+-- Name: water_a; Type: TABLE; Schema: socal; Owner: chatgis
+--
+
+CREATE TABLE socal.water_a (
+    gid integer NOT NULL,
+    osm_id character varying(12),
+    code smallint,
+    fclass character varying(28),
+    name character varying(100),
+    geom public.geometry(MultiPolygon,4326)
+);
+
+
+ALTER TABLE socal.water_a OWNER TO chatgis;
+
+--
+-- Name: water_a; Type: MATERIALIZED VIEW; Schema: california; Owner: chatgis
+--
+
+CREATE MATERIALIZED VIEW california.water_a AS
+ SELECT water_a.gid,
+    water_a.osm_id,
+    water_a.code,
+    water_a.fclass,
+    water_a.name,
+    water_a.geom
+   FROM socal.water_a
+UNION ALL
+ SELECT water_a.gid,
+    water_a.osm_id,
+    water_a.code,
+    water_a.fclass,
+    water_a.name,
+    water_a.geom
+   FROM norcal.water_a
+  WITH NO DATA;
+
+
+ALTER MATERIALIZED VIEW california.water_a OWNER TO chatgis;
+
+--
+-- Name: waterways; Type: TABLE; Schema: norcal; Owner: chatgis
+--
+
+CREATE TABLE norcal.waterways (
+    gid integer NOT NULL,
+    osm_id character varying(12),
+    code smallint,
+    fclass character varying(28),
+    width integer,
+    name character varying(100),
+    geom public.geometry(MultiLineString,4326)
+);
+
+
+ALTER TABLE norcal.waterways OWNER TO chatgis;
+
+--
+-- Name: waterways; Type: TABLE; Schema: socal; Owner: chatgis
+--
+
+CREATE TABLE socal.waterways (
+    gid integer NOT NULL,
+    osm_id character varying(12),
+    code smallint,
+    fclass character varying(28),
+    width integer,
+    name character varying(100),
+    geom public.geometry(MultiLineString,4326)
+);
+
+
+ALTER TABLE socal.waterways OWNER TO chatgis;
+
+--
+-- Name: waterways; Type: MATERIALIZED VIEW; Schema: california; Owner: chatgis
+--
+
+CREATE MATERIALIZED VIEW california.waterways AS
+ SELECT waterways.gid,
+    waterways.osm_id,
+    waterways.code,
+    waterways.fclass,
+    waterways.width,
+    waterways.name,
+    waterways.geom
+   FROM socal.waterways
+UNION ALL
+ SELECT waterways.gid,
+    waterways.osm_id,
+    waterways.code,
+    waterways.fclass,
+    waterways.width,
+    waterways.name,
+    waterways.geom
+   FROM norcal.waterways
+  WITH NO DATA;
+
+
+ALTER MATERIALIZED VIEW california.waterways OWNER TO chatgis;
+
+--
+-- Name: gis_osm_buildings_a_free_1_gid_seq; Type: SEQUENCE; Schema: norcal; Owner: chatgis
+--
+
+CREATE SEQUENCE norcal.gis_osm_buildings_a_free_1_gid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE norcal.gis_osm_buildings_a_free_1_gid_seq OWNER TO chatgis;
+
+--
+-- Name: gis_osm_buildings_a_free_1_gid_seq; Type: SEQUENCE OWNED BY; Schema: norcal; Owner: chatgis
+--
+
+ALTER SEQUENCE norcal.gis_osm_buildings_a_free_1_gid_seq OWNED BY norcal.buildings_a.gid;
+
+
+--
+-- Name: gis_osm_landuse_a_free_1_gid_seq; Type: SEQUENCE; Schema: norcal; Owner: chatgis
+--
+
+CREATE SEQUENCE norcal.gis_osm_landuse_a_free_1_gid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE norcal.gis_osm_landuse_a_free_1_gid_seq OWNER TO chatgis;
+
+--
+-- Name: gis_osm_landuse_a_free_1_gid_seq; Type: SEQUENCE OWNED BY; Schema: norcal; Owner: chatgis
+--
+
+ALTER SEQUENCE norcal.gis_osm_landuse_a_free_1_gid_seq OWNED BY norcal.landuse_a.gid;
+
+
+--
+-- Name: gis_osm_natural_a_free_1_gid_seq; Type: SEQUENCE; Schema: norcal; Owner: chatgis
+--
+
+CREATE SEQUENCE norcal.gis_osm_natural_a_free_1_gid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE norcal.gis_osm_natural_a_free_1_gid_seq OWNER TO chatgis;
+
+--
+-- Name: gis_osm_natural_a_free_1_gid_seq; Type: SEQUENCE OWNED BY; Schema: norcal; Owner: chatgis
+--
+
+ALTER SEQUENCE norcal.gis_osm_natural_a_free_1_gid_seq OWNED BY norcal.natural_a.gid;
+
+
+--
+-- Name: gis_osm_natural_free_1_gid_seq; Type: SEQUENCE; Schema: norcal; Owner: chatgis
+--
+
+CREATE SEQUENCE norcal.gis_osm_natural_free_1_gid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE norcal.gis_osm_natural_free_1_gid_seq OWNER TO chatgis;
+
+--
+-- Name: gis_osm_natural_free_1_gid_seq; Type: SEQUENCE OWNED BY; Schema: norcal; Owner: chatgis
+--
+
+ALTER SEQUENCE norcal.gis_osm_natural_free_1_gid_seq OWNED BY norcal."natural".gid;
+
+
+--
+-- Name: gis_osm_places_a_free_1_gid_seq; Type: SEQUENCE; Schema: norcal; Owner: chatgis
+--
+
+CREATE SEQUENCE norcal.gis_osm_places_a_free_1_gid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE norcal.gis_osm_places_a_free_1_gid_seq OWNER TO chatgis;
+
+--
+-- Name: gis_osm_places_a_free_1_gid_seq; Type: SEQUENCE OWNED BY; Schema: norcal; Owner: chatgis
+--
+
+ALTER SEQUENCE norcal.gis_osm_places_a_free_1_gid_seq OWNED BY norcal.places_a.gid;
+
+
+--
+-- Name: gis_osm_places_free_1_gid_seq; Type: SEQUENCE; Schema: norcal; Owner: chatgis
+--
+
+CREATE SEQUENCE norcal.gis_osm_places_free_1_gid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE norcal.gis_osm_places_free_1_gid_seq OWNER TO chatgis;
+
+--
+-- Name: gis_osm_places_free_1_gid_seq; Type: SEQUENCE OWNED BY; Schema: norcal; Owner: chatgis
+--
+
+ALTER SEQUENCE norcal.gis_osm_places_free_1_gid_seq OWNED BY norcal.places.gid;
+
+
+--
+-- Name: gis_osm_pofw_a_free_1_gid_seq; Type: SEQUENCE; Schema: norcal; Owner: chatgis
+--
+
+CREATE SEQUENCE norcal.gis_osm_pofw_a_free_1_gid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE norcal.gis_osm_pofw_a_free_1_gid_seq OWNER TO chatgis;
+
+--
+-- Name: gis_osm_pofw_a_free_1_gid_seq; Type: SEQUENCE OWNED BY; Schema: norcal; Owner: chatgis
+--
+
+ALTER SEQUENCE norcal.gis_osm_pofw_a_free_1_gid_seq OWNED BY norcal.pofw_a.gid;
+
+
+--
+-- Name: gis_osm_pofw_free_1_gid_seq; Type: SEQUENCE; Schema: norcal; Owner: chatgis
+--
+
+CREATE SEQUENCE norcal.gis_osm_pofw_free_1_gid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE norcal.gis_osm_pofw_free_1_gid_seq OWNER TO chatgis;
+
+--
+-- Name: gis_osm_pofw_free_1_gid_seq; Type: SEQUENCE OWNED BY; Schema: norcal; Owner: chatgis
+--
+
+ALTER SEQUENCE norcal.gis_osm_pofw_free_1_gid_seq OWNED BY norcal.pofw.gid;
+
+
+--
+-- Name: gis_osm_pois_a_free_1_gid_seq; Type: SEQUENCE; Schema: norcal; Owner: chatgis
+--
+
+CREATE SEQUENCE norcal.gis_osm_pois_a_free_1_gid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE norcal.gis_osm_pois_a_free_1_gid_seq OWNER TO chatgis;
+
+--
+-- Name: gis_osm_pois_a_free_1_gid_seq; Type: SEQUENCE OWNED BY; Schema: norcal; Owner: chatgis
+--
+
+ALTER SEQUENCE norcal.gis_osm_pois_a_free_1_gid_seq OWNED BY norcal.pois_a.gid;
+
+
+--
+-- Name: gis_osm_pois_free_1_gid_seq; Type: SEQUENCE; Schema: norcal; Owner: chatgis
+--
+
+CREATE SEQUENCE norcal.gis_osm_pois_free_1_gid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE norcal.gis_osm_pois_free_1_gid_seq OWNER TO chatgis;
+
+--
+-- Name: gis_osm_pois_free_1_gid_seq; Type: SEQUENCE OWNED BY; Schema: norcal; Owner: chatgis
+--
+
+ALTER SEQUENCE norcal.gis_osm_pois_free_1_gid_seq OWNED BY norcal.pois.gid;
+
+
+--
+-- Name: gis_osm_railways_free_1_gid_seq; Type: SEQUENCE; Schema: norcal; Owner: chatgis
+--
+
+CREATE SEQUENCE norcal.gis_osm_railways_free_1_gid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE norcal.gis_osm_railways_free_1_gid_seq OWNER TO chatgis;
+
+--
+-- Name: gis_osm_railways_free_1_gid_seq; Type: SEQUENCE OWNED BY; Schema: norcal; Owner: chatgis
+--
+
+ALTER SEQUENCE norcal.gis_osm_railways_free_1_gid_seq OWNED BY norcal.railways.gid;
+
+
+--
+-- Name: gis_osm_roads_free_1_gid_seq; Type: SEQUENCE; Schema: norcal; Owner: chatgis
+--
+
+CREATE SEQUENCE norcal.gis_osm_roads_free_1_gid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE norcal.gis_osm_roads_free_1_gid_seq OWNER TO chatgis;
+
+--
+-- Name: gis_osm_roads_free_1_gid_seq; Type: SEQUENCE OWNED BY; Schema: norcal; Owner: chatgis
+--
+
+ALTER SEQUENCE norcal.gis_osm_roads_free_1_gid_seq OWNED BY norcal.roads.gid;
+
+
+--
+-- Name: gis_osm_traffic_a_free_1_gid_seq; Type: SEQUENCE; Schema: norcal; Owner: chatgis
+--
+
+CREATE SEQUENCE norcal.gis_osm_traffic_a_free_1_gid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE norcal.gis_osm_traffic_a_free_1_gid_seq OWNER TO chatgis;
+
+--
+-- Name: gis_osm_traffic_a_free_1_gid_seq; Type: SEQUENCE OWNED BY; Schema: norcal; Owner: chatgis
+--
+
+ALTER SEQUENCE norcal.gis_osm_traffic_a_free_1_gid_seq OWNED BY norcal.traffic_a.gid;
+
+
+--
+-- Name: gis_osm_traffic_free_1_gid_seq; Type: SEQUENCE; Schema: norcal; Owner: chatgis
+--
+
+CREATE SEQUENCE norcal.gis_osm_traffic_free_1_gid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE norcal.gis_osm_traffic_free_1_gid_seq OWNER TO chatgis;
+
+--
+-- Name: gis_osm_traffic_free_1_gid_seq; Type: SEQUENCE OWNED BY; Schema: norcal; Owner: chatgis
+--
+
+ALTER SEQUENCE norcal.gis_osm_traffic_free_1_gid_seq OWNED BY norcal.traffic.gid;
+
+
+--
+-- Name: gis_osm_transport_a_free_1_gid_seq; Type: SEQUENCE; Schema: norcal; Owner: chatgis
+--
+
+CREATE SEQUENCE norcal.gis_osm_transport_a_free_1_gid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE norcal.gis_osm_transport_a_free_1_gid_seq OWNER TO chatgis;
+
+--
+-- Name: gis_osm_transport_a_free_1_gid_seq; Type: SEQUENCE OWNED BY; Schema: norcal; Owner: chatgis
+--
+
+ALTER SEQUENCE norcal.gis_osm_transport_a_free_1_gid_seq OWNED BY norcal.transport_a.gid;
+
+
+--
+-- Name: gis_osm_transport_free_1_gid_seq; Type: SEQUENCE; Schema: norcal; Owner: chatgis
+--
+
+CREATE SEQUENCE norcal.gis_osm_transport_free_1_gid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE norcal.gis_osm_transport_free_1_gid_seq OWNER TO chatgis;
+
+--
+-- Name: gis_osm_transport_free_1_gid_seq; Type: SEQUENCE OWNED BY; Schema: norcal; Owner: chatgis
+--
+
+ALTER SEQUENCE norcal.gis_osm_transport_free_1_gid_seq OWNED BY norcal.transport.gid;
+
+
+--
+-- Name: gis_osm_water_a_free_1_gid_seq; Type: SEQUENCE; Schema: norcal; Owner: chatgis
+--
+
+CREATE SEQUENCE norcal.gis_osm_water_a_free_1_gid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE norcal.gis_osm_water_a_free_1_gid_seq OWNER TO chatgis;
+
+--
+-- Name: gis_osm_water_a_free_1_gid_seq; Type: SEQUENCE OWNED BY; Schema: norcal; Owner: chatgis
+--
+
+ALTER SEQUENCE norcal.gis_osm_water_a_free_1_gid_seq OWNED BY norcal.water_a.gid;
+
+
+--
+-- Name: gis_osm_waterways_free_1_gid_seq; Type: SEQUENCE; Schema: norcal; Owner: chatgis
+--
+
+CREATE SEQUENCE norcal.gis_osm_waterways_free_1_gid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE norcal.gis_osm_waterways_free_1_gid_seq OWNER TO chatgis;
+
+--
+-- Name: gis_osm_waterways_free_1_gid_seq; Type: SEQUENCE OWNED BY; Schema: norcal; Owner: chatgis
+--
+
+ALTER SEQUENCE norcal.gis_osm_waterways_free_1_gid_seq OWNED BY norcal.waterways.gid;
+
+
+--
+-- Name: gis_osm_buildings_a_free_1_gid_seq; Type: SEQUENCE; Schema: socal; Owner: chatgis
+--
+
+CREATE SEQUENCE socal.gis_osm_buildings_a_free_1_gid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE socal.gis_osm_buildings_a_free_1_gid_seq OWNER TO chatgis;
+
+--
+-- Name: gis_osm_buildings_a_free_1_gid_seq; Type: SEQUENCE OWNED BY; Schema: socal; Owner: chatgis
+--
+
+ALTER SEQUENCE socal.gis_osm_buildings_a_free_1_gid_seq OWNED BY socal.buildings_a.gid;
+
+
+--
+-- Name: gis_osm_landuse_a_free_1_gid_seq; Type: SEQUENCE; Schema: socal; Owner: chatgis
+--
+
+CREATE SEQUENCE socal.gis_osm_landuse_a_free_1_gid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE socal.gis_osm_landuse_a_free_1_gid_seq OWNER TO chatgis;
+
+--
+-- Name: gis_osm_landuse_a_free_1_gid_seq; Type: SEQUENCE OWNED BY; Schema: socal; Owner: chatgis
+--
+
+ALTER SEQUENCE socal.gis_osm_landuse_a_free_1_gid_seq OWNED BY socal.landuse_a.gid;
+
+
+--
+-- Name: gis_osm_natural_a_free_1_gid_seq; Type: SEQUENCE; Schema: socal; Owner: chatgis
+--
+
+CREATE SEQUENCE socal.gis_osm_natural_a_free_1_gid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE socal.gis_osm_natural_a_free_1_gid_seq OWNER TO chatgis;
+
+--
+-- Name: gis_osm_natural_a_free_1_gid_seq; Type: SEQUENCE OWNED BY; Schema: socal; Owner: chatgis
+--
+
+ALTER SEQUENCE socal.gis_osm_natural_a_free_1_gid_seq OWNED BY socal.natural_a.gid;
+
+
+--
+-- Name: gis_osm_natural_free_1_gid_seq; Type: SEQUENCE; Schema: socal; Owner: chatgis
+--
+
+CREATE SEQUENCE socal.gis_osm_natural_free_1_gid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE socal.gis_osm_natural_free_1_gid_seq OWNER TO chatgis;
+
+--
+-- Name: gis_osm_natural_free_1_gid_seq; Type: SEQUENCE OWNED BY; Schema: socal; Owner: chatgis
+--
+
+ALTER SEQUENCE socal.gis_osm_natural_free_1_gid_seq OWNED BY socal."natural".gid;
+
+
+--
+-- Name: gis_osm_places_a_free_1_gid_seq; Type: SEQUENCE; Schema: socal; Owner: chatgis
+--
+
+CREATE SEQUENCE socal.gis_osm_places_a_free_1_gid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE socal.gis_osm_places_a_free_1_gid_seq OWNER TO chatgis;
+
+--
+-- Name: gis_osm_places_a_free_1_gid_seq; Type: SEQUENCE OWNED BY; Schema: socal; Owner: chatgis
+--
+
+ALTER SEQUENCE socal.gis_osm_places_a_free_1_gid_seq OWNED BY socal.places_a.gid;
+
+
+--
+-- Name: gis_osm_places_free_1_gid_seq; Type: SEQUENCE; Schema: socal; Owner: chatgis
+--
+
+CREATE SEQUENCE socal.gis_osm_places_free_1_gid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE socal.gis_osm_places_free_1_gid_seq OWNER TO chatgis;
+
+--
+-- Name: gis_osm_places_free_1_gid_seq; Type: SEQUENCE OWNED BY; Schema: socal; Owner: chatgis
+--
+
+ALTER SEQUENCE socal.gis_osm_places_free_1_gid_seq OWNED BY socal.places.gid;
+
+
+--
+-- Name: gis_osm_pofw_a_free_1_gid_seq; Type: SEQUENCE; Schema: socal; Owner: chatgis
+--
+
+CREATE SEQUENCE socal.gis_osm_pofw_a_free_1_gid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE socal.gis_osm_pofw_a_free_1_gid_seq OWNER TO chatgis;
+
+--
+-- Name: gis_osm_pofw_a_free_1_gid_seq; Type: SEQUENCE OWNED BY; Schema: socal; Owner: chatgis
+--
+
+ALTER SEQUENCE socal.gis_osm_pofw_a_free_1_gid_seq OWNED BY socal.pofw_a.gid;
+
+
+--
+-- Name: gis_osm_pofw_free_1_gid_seq; Type: SEQUENCE; Schema: socal; Owner: chatgis
+--
+
+CREATE SEQUENCE socal.gis_osm_pofw_free_1_gid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE socal.gis_osm_pofw_free_1_gid_seq OWNER TO chatgis;
+
+--
+-- Name: gis_osm_pofw_free_1_gid_seq; Type: SEQUENCE OWNED BY; Schema: socal; Owner: chatgis
+--
+
+ALTER SEQUENCE socal.gis_osm_pofw_free_1_gid_seq OWNED BY socal.pofw.gid;
+
+
+--
+-- Name: gis_osm_pois_a_free_1_gid_seq; Type: SEQUENCE; Schema: socal; Owner: chatgis
+--
+
+CREATE SEQUENCE socal.gis_osm_pois_a_free_1_gid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE socal.gis_osm_pois_a_free_1_gid_seq OWNER TO chatgis;
+
+--
+-- Name: gis_osm_pois_a_free_1_gid_seq; Type: SEQUENCE OWNED BY; Schema: socal; Owner: chatgis
+--
+
+ALTER SEQUENCE socal.gis_osm_pois_a_free_1_gid_seq OWNED BY socal.pois_a.gid;
+
+
+--
+-- Name: gis_osm_pois_free_1_gid_seq; Type: SEQUENCE; Schema: socal; Owner: chatgis
+--
+
+CREATE SEQUENCE socal.gis_osm_pois_free_1_gid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE socal.gis_osm_pois_free_1_gid_seq OWNER TO chatgis;
+
+--
+-- Name: gis_osm_pois_free_1_gid_seq; Type: SEQUENCE OWNED BY; Schema: socal; Owner: chatgis
+--
+
+ALTER SEQUENCE socal.gis_osm_pois_free_1_gid_seq OWNED BY socal.pois.gid;
+
+
+--
+-- Name: gis_osm_railways_free_1_gid_seq; Type: SEQUENCE; Schema: socal; Owner: chatgis
+--
+
+CREATE SEQUENCE socal.gis_osm_railways_free_1_gid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE socal.gis_osm_railways_free_1_gid_seq OWNER TO chatgis;
+
+--
+-- Name: gis_osm_railways_free_1_gid_seq; Type: SEQUENCE OWNED BY; Schema: socal; Owner: chatgis
+--
+
+ALTER SEQUENCE socal.gis_osm_railways_free_1_gid_seq OWNED BY socal.railways.gid;
+
+
+--
+-- Name: gis_osm_roads_free_1_gid_seq; Type: SEQUENCE; Schema: socal; Owner: chatgis
+--
+
+CREATE SEQUENCE socal.gis_osm_roads_free_1_gid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE socal.gis_osm_roads_free_1_gid_seq OWNER TO chatgis;
+
+--
+-- Name: gis_osm_roads_free_1_gid_seq; Type: SEQUENCE OWNED BY; Schema: socal; Owner: chatgis
+--
+
+ALTER SEQUENCE socal.gis_osm_roads_free_1_gid_seq OWNED BY socal.roads.gid;
+
+
+--
+-- Name: gis_osm_traffic_a_free_1_gid_seq; Type: SEQUENCE; Schema: socal; Owner: chatgis
+--
+
+CREATE SEQUENCE socal.gis_osm_traffic_a_free_1_gid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE socal.gis_osm_traffic_a_free_1_gid_seq OWNER TO chatgis;
+
+--
+-- Name: gis_osm_traffic_a_free_1_gid_seq; Type: SEQUENCE OWNED BY; Schema: socal; Owner: chatgis
+--
+
+ALTER SEQUENCE socal.gis_osm_traffic_a_free_1_gid_seq OWNED BY socal.traffic_a.gid;
+
+
+--
+-- Name: gis_osm_traffic_free_1_gid_seq; Type: SEQUENCE; Schema: socal; Owner: chatgis
+--
+
+CREATE SEQUENCE socal.gis_osm_traffic_free_1_gid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE socal.gis_osm_traffic_free_1_gid_seq OWNER TO chatgis;
+
+--
+-- Name: gis_osm_traffic_free_1_gid_seq; Type: SEQUENCE OWNED BY; Schema: socal; Owner: chatgis
+--
+
+ALTER SEQUENCE socal.gis_osm_traffic_free_1_gid_seq OWNED BY socal.traffic.gid;
+
+
+--
+-- Name: gis_osm_transport_a_free_1_gid_seq; Type: SEQUENCE; Schema: socal; Owner: chatgis
+--
+
+CREATE SEQUENCE socal.gis_osm_transport_a_free_1_gid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE socal.gis_osm_transport_a_free_1_gid_seq OWNER TO chatgis;
+
+--
+-- Name: gis_osm_transport_a_free_1_gid_seq; Type: SEQUENCE OWNED BY; Schema: socal; Owner: chatgis
+--
+
+ALTER SEQUENCE socal.gis_osm_transport_a_free_1_gid_seq OWNED BY socal.transport_a.gid;
+
+
+--
+-- Name: gis_osm_transport_free_1_gid_seq; Type: SEQUENCE; Schema: socal; Owner: chatgis
+--
+
+CREATE SEQUENCE socal.gis_osm_transport_free_1_gid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE socal.gis_osm_transport_free_1_gid_seq OWNER TO chatgis;
+
+--
+-- Name: gis_osm_transport_free_1_gid_seq; Type: SEQUENCE OWNED BY; Schema: socal; Owner: chatgis
+--
+
+ALTER SEQUENCE socal.gis_osm_transport_free_1_gid_seq OWNED BY socal.transport.gid;
+
+
+--
+-- Name: gis_osm_water_a_free_1_gid_seq; Type: SEQUENCE; Schema: socal; Owner: chatgis
+--
+
+CREATE SEQUENCE socal.gis_osm_water_a_free_1_gid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE socal.gis_osm_water_a_free_1_gid_seq OWNER TO chatgis;
+
+--
+-- Name: gis_osm_water_a_free_1_gid_seq; Type: SEQUENCE OWNED BY; Schema: socal; Owner: chatgis
+--
+
+ALTER SEQUENCE socal.gis_osm_water_a_free_1_gid_seq OWNED BY socal.water_a.gid;
+
+
+--
+-- Name: gis_osm_waterways_free_1_gid_seq; Type: SEQUENCE; Schema: socal; Owner: chatgis
+--
+
+CREATE SEQUENCE socal.gis_osm_waterways_free_1_gid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE socal.gis_osm_waterways_free_1_gid_seq OWNER TO chatgis;
+
+--
+-- Name: gis_osm_waterways_free_1_gid_seq; Type: SEQUENCE OWNED BY; Schema: socal; Owner: chatgis
+--
+
+ALTER SEQUENCE socal.gis_osm_waterways_free_1_gid_seq OWNED BY socal.waterways.gid;
+
+
+--
+-- Name: buildings_a gid; Type: DEFAULT; Schema: norcal; Owner: chatgis
+--
+
+ALTER TABLE ONLY norcal.buildings_a ALTER COLUMN gid SET DEFAULT nextval('norcal.gis_osm_buildings_a_free_1_gid_seq'::regclass);
+
+
+--
+-- Name: landuse_a gid; Type: DEFAULT; Schema: norcal; Owner: chatgis
+--
+
+ALTER TABLE ONLY norcal.landuse_a ALTER COLUMN gid SET DEFAULT nextval('norcal.gis_osm_landuse_a_free_1_gid_seq'::regclass);
+
+
+--
+-- Name: natural gid; Type: DEFAULT; Schema: norcal; Owner: chatgis
+--
+
+ALTER TABLE ONLY norcal."natural" ALTER COLUMN gid SET DEFAULT nextval('norcal.gis_osm_natural_free_1_gid_seq'::regclass);
+
+
+--
+-- Name: natural_a gid; Type: DEFAULT; Schema: norcal; Owner: chatgis
+--
+
+ALTER TABLE ONLY norcal.natural_a ALTER COLUMN gid SET DEFAULT nextval('norcal.gis_osm_natural_a_free_1_gid_seq'::regclass);
+
+
+--
+-- Name: places gid; Type: DEFAULT; Schema: norcal; Owner: chatgis
+--
+
+ALTER TABLE ONLY norcal.places ALTER COLUMN gid SET DEFAULT nextval('norcal.gis_osm_places_free_1_gid_seq'::regclass);
+
+
+--
+-- Name: places_a gid; Type: DEFAULT; Schema: norcal; Owner: chatgis
+--
+
+ALTER TABLE ONLY norcal.places_a ALTER COLUMN gid SET DEFAULT nextval('norcal.gis_osm_places_a_free_1_gid_seq'::regclass);
+
+
+--
+-- Name: pofw gid; Type: DEFAULT; Schema: norcal; Owner: chatgis
+--
+
+ALTER TABLE ONLY norcal.pofw ALTER COLUMN gid SET DEFAULT nextval('norcal.gis_osm_pofw_free_1_gid_seq'::regclass);
+
+
+--
+-- Name: pofw_a gid; Type: DEFAULT; Schema: norcal; Owner: chatgis
+--
+
+ALTER TABLE ONLY norcal.pofw_a ALTER COLUMN gid SET DEFAULT nextval('norcal.gis_osm_pofw_a_free_1_gid_seq'::regclass);
+
+
+--
+-- Name: pois gid; Type: DEFAULT; Schema: norcal; Owner: chatgis
+--
+
+ALTER TABLE ONLY norcal.pois ALTER COLUMN gid SET DEFAULT nextval('norcal.gis_osm_pois_free_1_gid_seq'::regclass);
+
+
+--
+-- Name: pois_a gid; Type: DEFAULT; Schema: norcal; Owner: chatgis
+--
+
+ALTER TABLE ONLY norcal.pois_a ALTER COLUMN gid SET DEFAULT nextval('norcal.gis_osm_pois_a_free_1_gid_seq'::regclass);
+
+
+--
+-- Name: railways gid; Type: DEFAULT; Schema: norcal; Owner: chatgis
+--
+
+ALTER TABLE ONLY norcal.railways ALTER COLUMN gid SET DEFAULT nextval('norcal.gis_osm_railways_free_1_gid_seq'::regclass);
+
+
+--
+-- Name: roads gid; Type: DEFAULT; Schema: norcal; Owner: chatgis
+--
+
+ALTER TABLE ONLY norcal.roads ALTER COLUMN gid SET DEFAULT nextval('norcal.gis_osm_roads_free_1_gid_seq'::regclass);
+
+
+--
+-- Name: traffic gid; Type: DEFAULT; Schema: norcal; Owner: chatgis
+--
+
+ALTER TABLE ONLY norcal.traffic ALTER COLUMN gid SET DEFAULT nextval('norcal.gis_osm_traffic_free_1_gid_seq'::regclass);
+
+
+--
+-- Name: traffic_a gid; Type: DEFAULT; Schema: norcal; Owner: chatgis
+--
+
+ALTER TABLE ONLY norcal.traffic_a ALTER COLUMN gid SET DEFAULT nextval('norcal.gis_osm_traffic_a_free_1_gid_seq'::regclass);
+
+
+--
+-- Name: transport gid; Type: DEFAULT; Schema: norcal; Owner: chatgis
+--
+
+ALTER TABLE ONLY norcal.transport ALTER COLUMN gid SET DEFAULT nextval('norcal.gis_osm_transport_free_1_gid_seq'::regclass);
+
+
+--
+-- Name: transport_a gid; Type: DEFAULT; Schema: norcal; Owner: chatgis
+--
+
+ALTER TABLE ONLY norcal.transport_a ALTER COLUMN gid SET DEFAULT nextval('norcal.gis_osm_transport_a_free_1_gid_seq'::regclass);
+
+
+--
+-- Name: water_a gid; Type: DEFAULT; Schema: norcal; Owner: chatgis
+--
+
+ALTER TABLE ONLY norcal.water_a ALTER COLUMN gid SET DEFAULT nextval('norcal.gis_osm_water_a_free_1_gid_seq'::regclass);
+
+
+--
+-- Name: waterways gid; Type: DEFAULT; Schema: norcal; Owner: chatgis
+--
+
+ALTER TABLE ONLY norcal.waterways ALTER COLUMN gid SET DEFAULT nextval('norcal.gis_osm_waterways_free_1_gid_seq'::regclass);
+
+
+--
+-- Name: buildings_a gid; Type: DEFAULT; Schema: socal; Owner: chatgis
+--
+
+ALTER TABLE ONLY socal.buildings_a ALTER COLUMN gid SET DEFAULT nextval('socal.gis_osm_buildings_a_free_1_gid_seq'::regclass);
+
+
+--
+-- Name: landuse_a gid; Type: DEFAULT; Schema: socal; Owner: chatgis
+--
+
+ALTER TABLE ONLY socal.landuse_a ALTER COLUMN gid SET DEFAULT nextval('socal.gis_osm_landuse_a_free_1_gid_seq'::regclass);
+
+
+--
+-- Name: natural gid; Type: DEFAULT; Schema: socal; Owner: chatgis
+--
+
+ALTER TABLE ONLY socal."natural" ALTER COLUMN gid SET DEFAULT nextval('socal.gis_osm_natural_free_1_gid_seq'::regclass);
+
+
+--
+-- Name: natural_a gid; Type: DEFAULT; Schema: socal; Owner: chatgis
+--
+
+ALTER TABLE ONLY socal.natural_a ALTER COLUMN gid SET DEFAULT nextval('socal.gis_osm_natural_a_free_1_gid_seq'::regclass);
+
+
+--
+-- Name: places gid; Type: DEFAULT; Schema: socal; Owner: chatgis
+--
+
+ALTER TABLE ONLY socal.places ALTER COLUMN gid SET DEFAULT nextval('socal.gis_osm_places_free_1_gid_seq'::regclass);
+
+
+--
+-- Name: places_a gid; Type: DEFAULT; Schema: socal; Owner: chatgis
+--
+
+ALTER TABLE ONLY socal.places_a ALTER COLUMN gid SET DEFAULT nextval('socal.gis_osm_places_a_free_1_gid_seq'::regclass);
+
+
+--
+-- Name: pofw gid; Type: DEFAULT; Schema: socal; Owner: chatgis
+--
+
+ALTER TABLE ONLY socal.pofw ALTER COLUMN gid SET DEFAULT nextval('socal.gis_osm_pofw_free_1_gid_seq'::regclass);
+
+
+--
+-- Name: pofw_a gid; Type: DEFAULT; Schema: socal; Owner: chatgis
+--
+
+ALTER TABLE ONLY socal.pofw_a ALTER COLUMN gid SET DEFAULT nextval('socal.gis_osm_pofw_a_free_1_gid_seq'::regclass);
+
+
+--
+-- Name: pois gid; Type: DEFAULT; Schema: socal; Owner: chatgis
+--
+
+ALTER TABLE ONLY socal.pois ALTER COLUMN gid SET DEFAULT nextval('socal.gis_osm_pois_free_1_gid_seq'::regclass);
+
+
+--
+-- Name: pois_a gid; Type: DEFAULT; Schema: socal; Owner: chatgis
+--
+
+ALTER TABLE ONLY socal.pois_a ALTER COLUMN gid SET DEFAULT nextval('socal.gis_osm_pois_a_free_1_gid_seq'::regclass);
+
+
+--
+-- Name: railways gid; Type: DEFAULT; Schema: socal; Owner: chatgis
+--
+
+ALTER TABLE ONLY socal.railways ALTER COLUMN gid SET DEFAULT nextval('socal.gis_osm_railways_free_1_gid_seq'::regclass);
+
+
+--
+-- Name: roads gid; Type: DEFAULT; Schema: socal; Owner: chatgis
+--
+
+ALTER TABLE ONLY socal.roads ALTER COLUMN gid SET DEFAULT nextval('socal.gis_osm_roads_free_1_gid_seq'::regclass);
+
+
+--
+-- Name: traffic gid; Type: DEFAULT; Schema: socal; Owner: chatgis
+--
+
+ALTER TABLE ONLY socal.traffic ALTER COLUMN gid SET DEFAULT nextval('socal.gis_osm_traffic_free_1_gid_seq'::regclass);
+
+
+--
+-- Name: traffic_a gid; Type: DEFAULT; Schema: socal; Owner: chatgis
+--
+
+ALTER TABLE ONLY socal.traffic_a ALTER COLUMN gid SET DEFAULT nextval('socal.gis_osm_traffic_a_free_1_gid_seq'::regclass);
+
+
+--
+-- Name: transport gid; Type: DEFAULT; Schema: socal; Owner: chatgis
+--
+
+ALTER TABLE ONLY socal.transport ALTER COLUMN gid SET DEFAULT nextval('socal.gis_osm_transport_free_1_gid_seq'::regclass);
+
+
+--
+-- Name: transport_a gid; Type: DEFAULT; Schema: socal; Owner: chatgis
+--
+
+ALTER TABLE ONLY socal.transport_a ALTER COLUMN gid SET DEFAULT nextval('socal.gis_osm_transport_a_free_1_gid_seq'::regclass);
+
+
+--
+-- Name: water_a gid; Type: DEFAULT; Schema: socal; Owner: chatgis
+--
+
+ALTER TABLE ONLY socal.water_a ALTER COLUMN gid SET DEFAULT nextval('socal.gis_osm_water_a_free_1_gid_seq'::regclass);
+
+
+--
+-- Name: waterways gid; Type: DEFAULT; Schema: socal; Owner: chatgis
+--
+
+ALTER TABLE ONLY socal.waterways ALTER COLUMN gid SET DEFAULT nextval('socal.gis_osm_waterways_free_1_gid_seq'::regclass);
+
+
+--
+-- Name: buildings_a gis_osm_buildings_a_free_1_pkey; Type: CONSTRAINT; Schema: norcal; Owner: chatgis
+--
+
+ALTER TABLE ONLY norcal.buildings_a
+    ADD CONSTRAINT gis_osm_buildings_a_free_1_pkey PRIMARY KEY (gid);
+
+
+--
+-- Name: landuse_a gis_osm_landuse_a_free_1_pkey; Type: CONSTRAINT; Schema: norcal; Owner: chatgis
+--
+
+ALTER TABLE ONLY norcal.landuse_a
+    ADD CONSTRAINT gis_osm_landuse_a_free_1_pkey PRIMARY KEY (gid);
+
+
+--
+-- Name: natural_a gis_osm_natural_a_free_1_pkey; Type: CONSTRAINT; Schema: norcal; Owner: chatgis
+--
+
+ALTER TABLE ONLY norcal.natural_a
+    ADD CONSTRAINT gis_osm_natural_a_free_1_pkey PRIMARY KEY (gid);
+
+
+--
+-- Name: natural gis_osm_natural_free_1_pkey; Type: CONSTRAINT; Schema: norcal; Owner: chatgis
+--
+
+ALTER TABLE ONLY norcal."natural"
+    ADD CONSTRAINT gis_osm_natural_free_1_pkey PRIMARY KEY (gid);
+
+
+--
+-- Name: places_a gis_osm_places_a_free_1_pkey; Type: CONSTRAINT; Schema: norcal; Owner: chatgis
+--
+
+ALTER TABLE ONLY norcal.places_a
+    ADD CONSTRAINT gis_osm_places_a_free_1_pkey PRIMARY KEY (gid);
+
+
+--
+-- Name: places gis_osm_places_free_1_pkey; Type: CONSTRAINT; Schema: norcal; Owner: chatgis
+--
+
+ALTER TABLE ONLY norcal.places
+    ADD CONSTRAINT gis_osm_places_free_1_pkey PRIMARY KEY (gid);
+
+
+--
+-- Name: pofw_a gis_osm_pofw_a_free_1_pkey; Type: CONSTRAINT; Schema: norcal; Owner: chatgis
+--
+
+ALTER TABLE ONLY norcal.pofw_a
+    ADD CONSTRAINT gis_osm_pofw_a_free_1_pkey PRIMARY KEY (gid);
+
+
+--
+-- Name: pofw gis_osm_pofw_free_1_pkey; Type: CONSTRAINT; Schema: norcal; Owner: chatgis
+--
+
+ALTER TABLE ONLY norcal.pofw
+    ADD CONSTRAINT gis_osm_pofw_free_1_pkey PRIMARY KEY (gid);
+
+
+--
+-- Name: pois_a gis_osm_pois_a_free_1_pkey; Type: CONSTRAINT; Schema: norcal; Owner: chatgis
+--
+
+ALTER TABLE ONLY norcal.pois_a
+    ADD CONSTRAINT gis_osm_pois_a_free_1_pkey PRIMARY KEY (gid);
+
+
+--
+-- Name: pois gis_osm_pois_free_1_pkey; Type: CONSTRAINT; Schema: norcal; Owner: chatgis
+--
+
+ALTER TABLE ONLY norcal.pois
+    ADD CONSTRAINT gis_osm_pois_free_1_pkey PRIMARY KEY (gid);
+
+
+--
+-- Name: railways gis_osm_railways_free_1_pkey; Type: CONSTRAINT; Schema: norcal; Owner: chatgis
+--
+
+ALTER TABLE ONLY norcal.railways
+    ADD CONSTRAINT gis_osm_railways_free_1_pkey PRIMARY KEY (gid);
+
+
+--
+-- Name: roads gis_osm_roads_free_1_pkey; Type: CONSTRAINT; Schema: norcal; Owner: chatgis
+--
+
+ALTER TABLE ONLY norcal.roads
+    ADD CONSTRAINT gis_osm_roads_free_1_pkey PRIMARY KEY (gid);
+
+
+--
+-- Name: traffic_a gis_osm_traffic_a_free_1_pkey; Type: CONSTRAINT; Schema: norcal; Owner: chatgis
+--
+
+ALTER TABLE ONLY norcal.traffic_a
+    ADD CONSTRAINT gis_osm_traffic_a_free_1_pkey PRIMARY KEY (gid);
+
+
+--
+-- Name: traffic gis_osm_traffic_free_1_pkey; Type: CONSTRAINT; Schema: norcal; Owner: chatgis
+--
+
+ALTER TABLE ONLY norcal.traffic
+    ADD CONSTRAINT gis_osm_traffic_free_1_pkey PRIMARY KEY (gid);
+
+
+--
+-- Name: transport_a gis_osm_transport_a_free_1_pkey; Type: CONSTRAINT; Schema: norcal; Owner: chatgis
+--
+
+ALTER TABLE ONLY norcal.transport_a
+    ADD CONSTRAINT gis_osm_transport_a_free_1_pkey PRIMARY KEY (gid);
+
+
+--
+-- Name: transport gis_osm_transport_free_1_pkey; Type: CONSTRAINT; Schema: norcal; Owner: chatgis
+--
+
+ALTER TABLE ONLY norcal.transport
+    ADD CONSTRAINT gis_osm_transport_free_1_pkey PRIMARY KEY (gid);
+
+
+--
+-- Name: water_a gis_osm_water_a_free_1_pkey; Type: CONSTRAINT; Schema: norcal; Owner: chatgis
+--
+
+ALTER TABLE ONLY norcal.water_a
+    ADD CONSTRAINT gis_osm_water_a_free_1_pkey PRIMARY KEY (gid);
+
+
+--
+-- Name: waterways gis_osm_waterways_free_1_pkey; Type: CONSTRAINT; Schema: norcal; Owner: chatgis
+--
+
+ALTER TABLE ONLY norcal.waterways
+    ADD CONSTRAINT gis_osm_waterways_free_1_pkey PRIMARY KEY (gid);
+
+
+--
+-- Name: buildings_a gis_osm_buildings_a_free_1_pkey; Type: CONSTRAINT; Schema: socal; Owner: chatgis
+--
+
+ALTER TABLE ONLY socal.buildings_a
+    ADD CONSTRAINT gis_osm_buildings_a_free_1_pkey PRIMARY KEY (gid);
+
+
+--
+-- Name: landuse_a gis_osm_landuse_a_free_1_pkey; Type: CONSTRAINT; Schema: socal; Owner: chatgis
+--
+
+ALTER TABLE ONLY socal.landuse_a
+    ADD CONSTRAINT gis_osm_landuse_a_free_1_pkey PRIMARY KEY (gid);
+
+
+--
+-- Name: natural_a gis_osm_natural_a_free_1_pkey; Type: CONSTRAINT; Schema: socal; Owner: chatgis
+--
+
+ALTER TABLE ONLY socal.natural_a
+    ADD CONSTRAINT gis_osm_natural_a_free_1_pkey PRIMARY KEY (gid);
+
+
+--
+-- Name: natural gis_osm_natural_free_1_pkey; Type: CONSTRAINT; Schema: socal; Owner: chatgis
+--
+
+ALTER TABLE ONLY socal."natural"
+    ADD CONSTRAINT gis_osm_natural_free_1_pkey PRIMARY KEY (gid);
+
+
+--
+-- Name: places_a gis_osm_places_a_free_1_pkey; Type: CONSTRAINT; Schema: socal; Owner: chatgis
+--
+
+ALTER TABLE ONLY socal.places_a
+    ADD CONSTRAINT gis_osm_places_a_free_1_pkey PRIMARY KEY (gid);
+
+
+--
+-- Name: places gis_osm_places_free_1_pkey; Type: CONSTRAINT; Schema: socal; Owner: chatgis
+--
+
+ALTER TABLE ONLY socal.places
+    ADD CONSTRAINT gis_osm_places_free_1_pkey PRIMARY KEY (gid);
+
+
+--
+-- Name: pofw_a gis_osm_pofw_a_free_1_pkey; Type: CONSTRAINT; Schema: socal; Owner: chatgis
+--
+
+ALTER TABLE ONLY socal.pofw_a
+    ADD CONSTRAINT gis_osm_pofw_a_free_1_pkey PRIMARY KEY (gid);
+
+
+--
+-- Name: pofw gis_osm_pofw_free_1_pkey; Type: CONSTRAINT; Schema: socal; Owner: chatgis
+--
+
+ALTER TABLE ONLY socal.pofw
+    ADD CONSTRAINT gis_osm_pofw_free_1_pkey PRIMARY KEY (gid);
+
+
+--
+-- Name: pois_a gis_osm_pois_a_free_1_pkey; Type: CONSTRAINT; Schema: socal; Owner: chatgis
+--
+
+ALTER TABLE ONLY socal.pois_a
+    ADD CONSTRAINT gis_osm_pois_a_free_1_pkey PRIMARY KEY (gid);
+
+
+--
+-- Name: pois gis_osm_pois_free_1_pkey; Type: CONSTRAINT; Schema: socal; Owner: chatgis
+--
+
+ALTER TABLE ONLY socal.pois
+    ADD CONSTRAINT gis_osm_pois_free_1_pkey PRIMARY KEY (gid);
+
+
+--
+-- Name: railways gis_osm_railways_free_1_pkey; Type: CONSTRAINT; Schema: socal; Owner: chatgis
+--
+
+ALTER TABLE ONLY socal.railways
+    ADD CONSTRAINT gis_osm_railways_free_1_pkey PRIMARY KEY (gid);
+
+
+--
+-- Name: roads gis_osm_roads_free_1_pkey; Type: CONSTRAINT; Schema: socal; Owner: chatgis
+--
+
+ALTER TABLE ONLY socal.roads
+    ADD CONSTRAINT gis_osm_roads_free_1_pkey PRIMARY KEY (gid);
+
+
+--
+-- Name: traffic_a gis_osm_traffic_a_free_1_pkey; Type: CONSTRAINT; Schema: socal; Owner: chatgis
+--
+
+ALTER TABLE ONLY socal.traffic_a
+    ADD CONSTRAINT gis_osm_traffic_a_free_1_pkey PRIMARY KEY (gid);
+
+
+--
+-- Name: traffic gis_osm_traffic_free_1_pkey; Type: CONSTRAINT; Schema: socal; Owner: chatgis
+--
+
+ALTER TABLE ONLY socal.traffic
+    ADD CONSTRAINT gis_osm_traffic_free_1_pkey PRIMARY KEY (gid);
+
+
+--
+-- Name: transport_a gis_osm_transport_a_free_1_pkey; Type: CONSTRAINT; Schema: socal; Owner: chatgis
+--
+
+ALTER TABLE ONLY socal.transport_a
+    ADD CONSTRAINT gis_osm_transport_a_free_1_pkey PRIMARY KEY (gid);
+
+
+--
+-- Name: transport gis_osm_transport_free_1_pkey; Type: CONSTRAINT; Schema: socal; Owner: chatgis
+--
+
+ALTER TABLE ONLY socal.transport
+    ADD CONSTRAINT gis_osm_transport_free_1_pkey PRIMARY KEY (gid);
+
+
+--
+-- Name: water_a gis_osm_water_a_free_1_pkey; Type: CONSTRAINT; Schema: socal; Owner: chatgis
+--
+
+ALTER TABLE ONLY socal.water_a
+    ADD CONSTRAINT gis_osm_water_a_free_1_pkey PRIMARY KEY (gid);
+
+
+--
+-- Name: waterways gis_osm_waterways_free_1_pkey; Type: CONSTRAINT; Schema: socal; Owner: chatgis
+--
+
+ALTER TABLE ONLY socal.waterways
+    ADD CONSTRAINT gis_osm_waterways_free_1_pkey PRIMARY KEY (gid);
+
+
+--
+-- Name: gis_osm_buildings_a_free_1_geom_idx; Type: INDEX; Schema: norcal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_buildings_a_free_1_geom_idx ON norcal.buildings_a USING gist (geom);
+
+
+--
+-- Name: gis_osm_buildings_a_free_1_geom_idx1; Type: INDEX; Schema: norcal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_buildings_a_free_1_geom_idx1 ON norcal.buildings_a USING gist (geom);
+
+
+--
+-- Name: gis_osm_landuse_a_free_1_geom_idx; Type: INDEX; Schema: norcal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_landuse_a_free_1_geom_idx ON norcal.landuse_a USING gist (geom);
+
+
+--
+-- Name: gis_osm_landuse_a_free_1_geom_idx1; Type: INDEX; Schema: norcal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_landuse_a_free_1_geom_idx1 ON norcal.landuse_a USING gist (geom);
+
+
+--
+-- Name: gis_osm_natural_a_free_1_geom_idx; Type: INDEX; Schema: norcal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_natural_a_free_1_geom_idx ON norcal.natural_a USING gist (geom);
+
+
+--
+-- Name: gis_osm_natural_a_free_1_geom_idx1; Type: INDEX; Schema: norcal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_natural_a_free_1_geom_idx1 ON norcal.natural_a USING gist (geom);
+
+
+--
+-- Name: gis_osm_natural_free_1_geom_idx; Type: INDEX; Schema: norcal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_natural_free_1_geom_idx ON norcal."natural" USING gist (geom);
+
+
+--
+-- Name: gis_osm_natural_free_1_geom_idx1; Type: INDEX; Schema: norcal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_natural_free_1_geom_idx1 ON norcal."natural" USING gist (geom);
+
+
+--
+-- Name: gis_osm_places_a_free_1_geom_idx; Type: INDEX; Schema: norcal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_places_a_free_1_geom_idx ON norcal.places_a USING gist (geom);
+
+
+--
+-- Name: gis_osm_places_a_free_1_geom_idx1; Type: INDEX; Schema: norcal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_places_a_free_1_geom_idx1 ON norcal.places_a USING gist (geom);
+
+
+--
+-- Name: gis_osm_places_free_1_geom_idx; Type: INDEX; Schema: norcal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_places_free_1_geom_idx ON norcal.places USING gist (geom);
+
+
+--
+-- Name: gis_osm_places_free_1_geom_idx1; Type: INDEX; Schema: norcal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_places_free_1_geom_idx1 ON norcal.places USING gist (geom);
+
+
+--
+-- Name: gis_osm_pofw_a_free_1_geom_idx; Type: INDEX; Schema: norcal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_pofw_a_free_1_geom_idx ON norcal.pofw_a USING gist (geom);
+
+
+--
+-- Name: gis_osm_pofw_a_free_1_geom_idx1; Type: INDEX; Schema: norcal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_pofw_a_free_1_geom_idx1 ON norcal.pofw_a USING gist (geom);
+
+
+--
+-- Name: gis_osm_pofw_free_1_geom_idx; Type: INDEX; Schema: norcal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_pofw_free_1_geom_idx ON norcal.pofw USING gist (geom);
+
+
+--
+-- Name: gis_osm_pofw_free_1_geom_idx1; Type: INDEX; Schema: norcal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_pofw_free_1_geom_idx1 ON norcal.pofw USING gist (geom);
+
+
+--
+-- Name: gis_osm_pois_a_free_1_geom_idx; Type: INDEX; Schema: norcal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_pois_a_free_1_geom_idx ON norcal.pois_a USING gist (geom);
+
+
+--
+-- Name: gis_osm_pois_a_free_1_geom_idx1; Type: INDEX; Schema: norcal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_pois_a_free_1_geom_idx1 ON norcal.pois_a USING gist (geom);
+
+
+--
+-- Name: gis_osm_pois_free_1_geom_idx; Type: INDEX; Schema: norcal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_pois_free_1_geom_idx ON norcal.pois USING gist (geom);
+
+
+--
+-- Name: gis_osm_pois_free_1_geom_idx1; Type: INDEX; Schema: norcal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_pois_free_1_geom_idx1 ON norcal.pois USING gist (geom);
+
+
+--
+-- Name: gis_osm_railways_free_1_geom_idx; Type: INDEX; Schema: norcal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_railways_free_1_geom_idx ON norcal.railways USING gist (geom);
+
+
+--
+-- Name: gis_osm_railways_free_1_geom_idx1; Type: INDEX; Schema: norcal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_railways_free_1_geom_idx1 ON norcal.railways USING gist (geom);
+
+
+--
+-- Name: gis_osm_roads_free_1_geom_idx; Type: INDEX; Schema: norcal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_roads_free_1_geom_idx ON norcal.roads USING gist (geom);
+
+
+--
+-- Name: gis_osm_roads_free_1_geom_idx1; Type: INDEX; Schema: norcal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_roads_free_1_geom_idx1 ON norcal.roads USING gist (geom);
+
+
+--
+-- Name: gis_osm_traffic_a_free_1_geom_idx; Type: INDEX; Schema: norcal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_traffic_a_free_1_geom_idx ON norcal.traffic_a USING gist (geom);
+
+
+--
+-- Name: gis_osm_traffic_a_free_1_geom_idx1; Type: INDEX; Schema: norcal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_traffic_a_free_1_geom_idx1 ON norcal.traffic_a USING gist (geom);
+
+
+--
+-- Name: gis_osm_traffic_free_1_geom_idx; Type: INDEX; Schema: norcal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_traffic_free_1_geom_idx ON norcal.traffic USING gist (geom);
+
+
+--
+-- Name: gis_osm_traffic_free_1_geom_idx1; Type: INDEX; Schema: norcal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_traffic_free_1_geom_idx1 ON norcal.traffic USING gist (geom);
+
+
+--
+-- Name: gis_osm_transport_a_free_1_geom_idx; Type: INDEX; Schema: norcal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_transport_a_free_1_geom_idx ON norcal.transport_a USING gist (geom);
+
+
+--
+-- Name: gis_osm_transport_a_free_1_geom_idx1; Type: INDEX; Schema: norcal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_transport_a_free_1_geom_idx1 ON norcal.transport_a USING gist (geom);
+
+
+--
+-- Name: gis_osm_transport_free_1_geom_idx; Type: INDEX; Schema: norcal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_transport_free_1_geom_idx ON norcal.transport USING gist (geom);
+
+
+--
+-- Name: gis_osm_transport_free_1_geom_idx1; Type: INDEX; Schema: norcal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_transport_free_1_geom_idx1 ON norcal.transport USING gist (geom);
+
+
+--
+-- Name: gis_osm_water_a_free_1_geom_idx; Type: INDEX; Schema: norcal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_water_a_free_1_geom_idx ON norcal.water_a USING gist (geom);
+
+
+--
+-- Name: gis_osm_water_a_free_1_geom_idx1; Type: INDEX; Schema: norcal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_water_a_free_1_geom_idx1 ON norcal.water_a USING gist (geom);
+
+
+--
+-- Name: gis_osm_waterways_free_1_geom_idx; Type: INDEX; Schema: norcal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_waterways_free_1_geom_idx ON norcal.waterways USING gist (geom);
+
+
+--
+-- Name: gis_osm_waterways_free_1_geom_idx1; Type: INDEX; Schema: norcal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_waterways_free_1_geom_idx1 ON norcal.waterways USING gist (geom);
+
+
+--
+-- Name: gis_osm_buildings_a_free_1_geom_idx; Type: INDEX; Schema: socal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_buildings_a_free_1_geom_idx ON socal.buildings_a USING gist (geom);
+
+
+--
+-- Name: gis_osm_buildings_a_free_1_geom_idx1; Type: INDEX; Schema: socal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_buildings_a_free_1_geom_idx1 ON socal.buildings_a USING gist (geom);
+
+
+--
+-- Name: gis_osm_landuse_a_free_1_geom_idx; Type: INDEX; Schema: socal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_landuse_a_free_1_geom_idx ON socal.landuse_a USING gist (geom);
+
+
+--
+-- Name: gis_osm_landuse_a_free_1_geom_idx1; Type: INDEX; Schema: socal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_landuse_a_free_1_geom_idx1 ON socal.landuse_a USING gist (geom);
+
+
+--
+-- Name: gis_osm_natural_a_free_1_geom_idx; Type: INDEX; Schema: socal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_natural_a_free_1_geom_idx ON socal.natural_a USING gist (geom);
+
+
+--
+-- Name: gis_osm_natural_a_free_1_geom_idx1; Type: INDEX; Schema: socal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_natural_a_free_1_geom_idx1 ON socal.natural_a USING gist (geom);
+
+
+--
+-- Name: gis_osm_natural_free_1_geom_idx; Type: INDEX; Schema: socal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_natural_free_1_geom_idx ON socal."natural" USING gist (geom);
+
+
+--
+-- Name: gis_osm_natural_free_1_geom_idx1; Type: INDEX; Schema: socal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_natural_free_1_geom_idx1 ON socal."natural" USING gist (geom);
+
+
+--
+-- Name: gis_osm_places_a_free_1_geom_idx; Type: INDEX; Schema: socal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_places_a_free_1_geom_idx ON socal.places_a USING gist (geom);
+
+
+--
+-- Name: gis_osm_places_a_free_1_geom_idx1; Type: INDEX; Schema: socal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_places_a_free_1_geom_idx1 ON socal.places_a USING gist (geom);
+
+
+--
+-- Name: gis_osm_places_free_1_geom_idx; Type: INDEX; Schema: socal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_places_free_1_geom_idx ON socal.places USING gist (geom);
+
+
+--
+-- Name: gis_osm_places_free_1_geom_idx1; Type: INDEX; Schema: socal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_places_free_1_geom_idx1 ON socal.places USING gist (geom);
+
+
+--
+-- Name: gis_osm_pofw_a_free_1_geom_idx; Type: INDEX; Schema: socal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_pofw_a_free_1_geom_idx ON socal.pofw_a USING gist (geom);
+
+
+--
+-- Name: gis_osm_pofw_a_free_1_geom_idx1; Type: INDEX; Schema: socal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_pofw_a_free_1_geom_idx1 ON socal.pofw_a USING gist (geom);
+
+
+--
+-- Name: gis_osm_pofw_free_1_geom_idx; Type: INDEX; Schema: socal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_pofw_free_1_geom_idx ON socal.pofw USING gist (geom);
+
+
+--
+-- Name: gis_osm_pofw_free_1_geom_idx1; Type: INDEX; Schema: socal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_pofw_free_1_geom_idx1 ON socal.pofw USING gist (geom);
+
+
+--
+-- Name: gis_osm_pois_a_free_1_geom_idx; Type: INDEX; Schema: socal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_pois_a_free_1_geom_idx ON socal.pois_a USING gist (geom);
+
+
+--
+-- Name: gis_osm_pois_a_free_1_geom_idx1; Type: INDEX; Schema: socal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_pois_a_free_1_geom_idx1 ON socal.pois_a USING gist (geom);
+
+
+--
+-- Name: gis_osm_pois_free_1_geom_idx; Type: INDEX; Schema: socal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_pois_free_1_geom_idx ON socal.pois USING gist (geom);
+
+
+--
+-- Name: gis_osm_pois_free_1_geom_idx1; Type: INDEX; Schema: socal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_pois_free_1_geom_idx1 ON socal.pois USING gist (geom);
+
+
+--
+-- Name: gis_osm_railways_free_1_geom_idx; Type: INDEX; Schema: socal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_railways_free_1_geom_idx ON socal.railways USING gist (geom);
+
+
+--
+-- Name: gis_osm_railways_free_1_geom_idx1; Type: INDEX; Schema: socal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_railways_free_1_geom_idx1 ON socal.railways USING gist (geom);
+
+
+--
+-- Name: gis_osm_roads_free_1_geom_idx; Type: INDEX; Schema: socal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_roads_free_1_geom_idx ON socal.roads USING gist (geom);
+
+
+--
+-- Name: gis_osm_roads_free_1_geom_idx1; Type: INDEX; Schema: socal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_roads_free_1_geom_idx1 ON socal.roads USING gist (geom);
+
+
+--
+-- Name: gis_osm_traffic_a_free_1_geom_idx; Type: INDEX; Schema: socal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_traffic_a_free_1_geom_idx ON socal.traffic_a USING gist (geom);
+
+
+--
+-- Name: gis_osm_traffic_a_free_1_geom_idx1; Type: INDEX; Schema: socal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_traffic_a_free_1_geom_idx1 ON socal.traffic_a USING gist (geom);
+
+
+--
+-- Name: gis_osm_traffic_free_1_geom_idx; Type: INDEX; Schema: socal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_traffic_free_1_geom_idx ON socal.traffic USING gist (geom);
+
+
+--
+-- Name: gis_osm_traffic_free_1_geom_idx1; Type: INDEX; Schema: socal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_traffic_free_1_geom_idx1 ON socal.traffic USING gist (geom);
+
+
+--
+-- Name: gis_osm_transport_a_free_1_geom_idx; Type: INDEX; Schema: socal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_transport_a_free_1_geom_idx ON socal.transport_a USING gist (geom);
+
+
+--
+-- Name: gis_osm_transport_a_free_1_geom_idx1; Type: INDEX; Schema: socal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_transport_a_free_1_geom_idx1 ON socal.transport_a USING gist (geom);
+
+
+--
+-- Name: gis_osm_transport_free_1_geom_idx; Type: INDEX; Schema: socal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_transport_free_1_geom_idx ON socal.transport USING gist (geom);
+
+
+--
+-- Name: gis_osm_transport_free_1_geom_idx1; Type: INDEX; Schema: socal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_transport_free_1_geom_idx1 ON socal.transport USING gist (geom);
+
+
+--
+-- Name: gis_osm_water_a_free_1_geom_idx; Type: INDEX; Schema: socal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_water_a_free_1_geom_idx ON socal.water_a USING gist (geom);
+
+
+--
+-- Name: gis_osm_water_a_free_1_geom_idx1; Type: INDEX; Schema: socal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_water_a_free_1_geom_idx1 ON socal.water_a USING gist (geom);
+
+
+--
+-- Name: gis_osm_waterways_free_1_geom_idx; Type: INDEX; Schema: socal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_waterways_free_1_geom_idx ON socal.waterways USING gist (geom);
+
+
+--
+-- Name: gis_osm_waterways_free_1_geom_idx1; Type: INDEX; Schema: socal; Owner: chatgis
+--
+
+CREATE INDEX gis_osm_waterways_free_1_geom_idx1 ON socal.waterways USING gist (geom);
+
+
+--
+-- PostgreSQL database dump complete
+--
+
