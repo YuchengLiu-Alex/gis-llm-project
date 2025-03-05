@@ -778,13 +778,10 @@ INPUT /usr/local/texlive/2023/texmf-dist/fonts/tfm/public/cm/cmti10.tfm
 INPUT /usr/local/texlive/2023/texmf-var/fonts/map/pdftex/updmap/pdftex.map
 INPUT /usr/local/texlive/2023/texmf-dist/fonts/tfm/public/cm/cmr12.tfm
 INPUT /usr/local/texlive/2023/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
-INPUT /usr/local/texlive/2023/texmf-dist/fonts/tfm/public/cm/cmr12.tfm
-INPUT /usr/local/texlive/2023/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
-INPUT ./figs/Overview.pdf
-INPUT ./figs/Overview.pdf
-INPUT figs/Overview.pdf
-INPUT ./figs/Overview.pdf
-INPUT ./figs/Overview.pdf
+INPUT ./Midterm.bbl
+INPUT Midterm.bbl
+INPUT ./Midterm.bbl
+INPUT Midterm.bbl
 INPUT Midterm.aux
 INPUT ./Midterm.out
 INPUT ./Midterm.out
